@@ -1,0 +1,76 @@
+<html>
+  <head>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
+  </head>
+  
+  <body>
+    
+    <script>
+      var socket = io.connect();
+      socket.on('responseFromServer', function(data){
+		  console.log(data);
+		
+		  var div = document.getElementById('predicts');
+		  div.innerHTML = '';
+		
+		  div.innerHTML += data;	
+			/*
+		  if(data != '') {
+			  datasplit = data.split(',');
+			  for(i=0; i<datasplit.length; i++) {
+				  div.innerHTML += '<div id="predictions">' +  datasplit[i].split(':')[0] + '</div>';
+				  div.innerHTML += '<div id="confidence">' + 'Confidence:' + '<b>' + datasplit[i].split(':')[1] + '</b>' + '</div>';	
+			  }
+		  } */
+
+	      var currentTime = new Date(),
+		  hours = currentTime.getHours(),
+          minutes = currentTime.getMinutes();
+          seconds = currentTime.getSeconds();
+		  if (minutes < 10) {minutes = "0" + minutes;}
+		  if (seconds < 10) {seconds = "0" + seconds;}
+	      div.innerHTML += '<div id = "time">' + 'Time:' +  '<b>' + hours + ":" + minutes + ":" + seconds + '</b>' + '</div>';
+	  });
+	  
+    </script>
+    
+    <div id="predicts">Predictions are loading...</div>
+  
+  </body>
+  
+  <style>
+    body{
+		background-color: rgb(206,206,206);
+		margin-top: 100px;
+	}
+    #predicts {
+		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+		font-size: 36px;
+		margin-top: 20px;
+		font-weight: bold;
+		text-align: center;
+	}
+	#predictions{
+		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+		font-size: 36px;
+		margin-top: 20px;
+		font-weight: bold;
+		text-align: center;
+	}
+	#confidence{
+		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+		font-size: 24px;
+		font-weight: lighter;
+		text-align: center;
+	}
+	#time{
+		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+		font-size: 24px;
+		margin-top: 50px;
+		font-weight: lighter;
+		text-align: center;
+	}
+  </style>
+
+</html>
