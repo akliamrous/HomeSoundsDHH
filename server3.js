@@ -2,9 +2,6 @@
 var http = require('http');  								
 var fs = require('fs'), bite_size = 256, readbytes = 0, file;
 var io = require('socket.io');
-//.net server
-const net = require("net");
-
 var server = http.createServer(function (request, response) {  
   
   fs.readFile('client.html', function(error, data){
@@ -22,6 +19,7 @@ listener.sockets.on('connection', function(socket){
 
 /****** .net server *****/
 // Create a simple server
+const net = require("net");
 var server = net.createServer(function (conn) {
     console.log("Server: A .net client connected");
 
@@ -45,7 +43,6 @@ var server = net.createServer(function (conn) {
         )
     );
 });
-
 // Listen for connections
 server.listen(61337, "localhost", function () {
     console.log("Server: listening for clients");
