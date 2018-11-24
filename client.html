@@ -8,22 +8,14 @@
     
     <script>
       var socket = io.connect();
-      socket.on('responseFromServer', function(data){
+      socket.on('responseFromHttpServer', function(data){
 		  console.log(data);
 		
 		  var div = document.getElementById('predicts');
 		  div.innerHTML = '';
-		
-		  div.innerHTML += data;	
-			/*
-		  if(data != '') {
-			  datasplit = data.split(',');
-			  for(i=0; i<datasplit.length; i++) {
-				  div.innerHTML += '<div id="predictions">' +  datasplit[i].split(':')[0] + '</div>';
-				  div.innerHTML += '<div id="confidence">' + 'Confidence:' + '<b>' + datasplit[i].split(':')[1] + '</b>' + '</div>';	
-			  }
-		  } */
-
+		  data = JSON.parse(data);
+		  div.innerHTML += "Client " + data.clientid + " says: " + data.dataFromHttpServer;
+		  
 	      var currentTime = new Date(),
 		  hours = currentTime.getHours(),
           minutes = currentTime.getMinutes();
