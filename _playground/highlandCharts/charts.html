@@ -1,55 +1,17 @@
-<html>
-  <head>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-	<script src="https://code.highcharts.com/highcharts.js"></script>
-	<script src="https://code.highcharts.com/modules/exporting.js"></script>
-	<script src="https://code.highcharts.com/modules/export-data.js"></script>
-	<title>Waveform View - Home Sound</title>
-  </head>
-  
-  <body>
-    
-	<div id="container1" style="width: 90%; min-width: 310px; height: 25%; margin: 20 auto"></div>
-	<div id="container2" style="width: 90%; min-width: 310px; height: 25%; margin: 20 auto"></div>
-	<div id="container3" style="width: 90%; min-width: 310px; height: 25%; margin: 20 auto"></div>
-    
-    <script> 
-	var BEDROOM = "1", LOBBY = "2", KITCHEN = "3";
-	var y1 = y2 = y3 = 0;
-			
-	/**** Data from Socket ****/
-      var socket = io.connect();
-      socket.on('responseFromHttpServer', function(data){
-		  
-		  data = JSON.parse(data);
-		  
-		  if(data.clientid == BEDROOM)
-	      {
-			y1 = parseFloat(data.dataFromHttpServer);
-			console.log("1:" + y1);
-		  }
-		  
-		  else if(data.clientid == LOBBY)
-	      {
-			y2 = parseFloat(data.dataFromHttpServer);
-			console.log("2:" + y2);
-		  }
-		  	
-		  else if(data.clientid == KITCHEN)
-	      {
-			y3 = parseFloat(data.dataFromHttpServer);
-			console.log("3:" + y3);
-		  }		
-			
-	  });
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
 
-	/**** Charts *****/
-	
+<div id="container1" style="width: 90%; min-width: 310px; height: 25%; margin: 20 auto"></div>
+<div id="container2" style="width: 90%; min-width: 310px; height: 25%; margin: 20 auto"></div>
+<div id="container3" style="width: 90%; min-width: 310px; height: 25%; margin: 20 auto"></div>
+
+<script>
 	/*Bedroom*/
 	Highcharts.chart('container1', {
 		chart: {
-			type: 'areaspline',
+			type: 'spline',
 			animation: Highcharts.svg, // don't animate in old IE
 			marginRight: 10,
 			/* Dynamic Data */
@@ -60,7 +22,7 @@
 					var series = this.series[0];
 					setInterval(function () {
 						var x = (new Date()).getTime(), // current time
-							y = y1;
+							y = Math.random();
 						series.addPoint([x, y], true, true);
 					}, 1000);
 				}
@@ -75,7 +37,7 @@
 			text: 'Bedroom',
 			align: 'left',
 			style: {"font-size": "200%", "color": "#676767"},
-			margin: 0,
+			margin:0,
 			x: 30
 		},
 		xAxis: {
@@ -111,7 +73,7 @@
 			enabled: false
 		},
 		plotOptions: {
-			areaspline: {
+			spline: {
 				marker: {
 					enabled: false
 				},
@@ -120,7 +82,6 @@
 		/* Initial Data */
 		series: [{				
 			name: 'Bedroom',
-			fillOpacity: 0.2,
 			data: (function () {
 				// generate an array of random data
 				var data = [],
@@ -141,7 +102,7 @@
 	/*Lobby*/
 	Highcharts.chart('container2', {
 		chart: {
-			type: 'areaspline',
+			type: 'spline',
 			animation: Highcharts.svg, // don't animate in old IE
 			marginRight: 10,
 			/* Dynamic Data */
@@ -152,7 +113,7 @@
 					var series = this.series[0];
 					setInterval(function () {
 						var x = (new Date()).getTime(), // current time
-							y = y2;
+							y = Math.random();
 						series.addPoint([x, y], true, true);
 					}, 1000);
 				}
@@ -203,7 +164,7 @@
 			enabled: false
 		},
 		plotOptions: {
-			areaspline: {
+			spline: {
 				marker: {
 					enabled: false
 				},
@@ -212,8 +173,7 @@
 		/* Initial Data */
 		series: [{				
 			name: 'Lobby',
-			color: "#434348",
-			fillOpacity: 0.2,
+			fillOpacity: 0.3,
 			data: (function () {
 				// generate an array of random data
 				var data = [],
@@ -234,7 +194,7 @@
 	/*Kitchen*/
 	Highcharts.chart('container3', {
 		chart: {
-			type: 'areaspline',
+			type: 'spline',
 			animation: Highcharts.svg, // don't animate in old IE
 			marginRight: 10,
 			/* Dynamic Data */
@@ -245,7 +205,7 @@
 					var series = this.series[0];
 					setInterval(function () {
 						var x = (new Date()).getTime(), // current time
-							y = y3;
+							y = Math.random();
 						series.addPoint([x, y], true, true);
 					}, 1000);
 				}
@@ -260,7 +220,7 @@
 			text: 'Kitchen',
 			align: 'left',
 			style: {"font-size": "200%", "color": "#676767"},
-			margin: 0,
+			margin:0,
 			x: 30
 		},
 		xAxis: {
@@ -296,7 +256,8 @@
 			enabled: false
 		},
 		plotOptions: {
-			areaspline: {
+			spline: {
+				color: "#77ee77",
 				marker: {
 					enabled: false
 				},
@@ -305,8 +266,6 @@
 		/* Initial Data */
 		series: [{				
 			name: 'Kitchen',
-			color: "#77ee77",
-			fillOpacity: 0.2,
 			data: (function () {
 				// generate an array of random data
 				var data = [],
@@ -330,8 +289,4 @@
 	for (j = 0; j < x.length; j++) {
 		x[j].style.display = "none";
 	}
-	</script>
-  
-  </body>
-
-</html>
+</script>
