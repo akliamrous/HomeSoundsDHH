@@ -1,0 +1,22 @@
+ToDo:
+
+1. Floorplan backend: Server recognizes high, med, low, blank. (very basic - heuristic)
+
+2. Fix soundlist: remove search
+convert sound -> loudness
+location whatever
+
+3.  Test with tablet -- basically two systems
+
+Then you can show to Jon...
+
+4. Logging - High, med, low, and time...
+
+5. Implementing "duration" of high, med, low in server  (+ log) and in list view
+
+6. Change waveform...
+
+7. Noise filter convert to a more sophisticated high med low
+
+8. ..... Somewhere.. Fix and test backend. 
+

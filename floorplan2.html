@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<title>Floorplan View - Home Sound</title>
+	<style>
+	  body, html {
+		  font: 24px Helvetica, Arial;
+		  height: 100%;
+		  width: 100%;
+		  background-image: u);
+		  background-repeat: no-repeat;
+		  background-size: 100%;
+		  background-attachment: fixed;
+		}
+		.container {
+		  position: relative;
+		  height: 100%;
+		  width: 100%;
+		  display: block;
+		  margin: 0 auto 0;
+		}
+		img {
+		  position: absolute;
+		  left: 50%; transform: translate(-50%,0);
+		  z-index: -1;
+		  display: block;
+		  margin-left: auto;
+		  margin-right: auto;
+		}
+			.img-first-room{
+			  width: 70%;
+			  height: 100%;
+			}
+			.img-second-room{
+			  width: 50%;
+			  height: 70%;
+			}
+		span {
+		  position: absolute;
+		  left: 50%;
+		  opacity: 20%;
+		  background: yellow;
+		  opacity: 0;
+		  transition: opacity .2s;
+		}
+			.rect-first-room{
+			  /*Define individual room layout here */
+			  width: 66.2%; height: 94%; transform: translate(-50%, 3.3%);
+			}		
+			.rect-second-room{
+			  /*Define individual room layout here */
+			  width: 47%; height: 62%; transform: translate(-50%, 6.4%);
+			}
+	
+  </style>
+  </head>
+  <body>
+	<div class='container'>	
+		<img class="img-first-room" src="./dj-office.JPG">
+		<span class="rect-first-room"></span>
+	</div>
+	
+	<div class='container'>	
+		<img class="img-second-room" src="./jon-office.jpg">
+		<span class="rect-second-room"></span>
+	</div>
+   
+    <script>
+	var FIRST_ROOM = "dj-office", SECOND_ROOM = "jon-office", THIRD_ROOM = "dj-home";
+	
+	/**** Data from Socket ****/
+      var socket = io.connect();
+      socket.on('responseFromHttpServer', function(data){
+		  
+		  data = JSON.parse(data);
+		  
+		  
+		  if(data.clientid == FIRST_ROOM)
+	      {
+			y1 = parseFloat(data.dataFromHttpServer);
+			console.log("Floorplan dj-office:" + y1 + data.absLoudLevel);  
+			if (data.absLoudLevel == "Loud")
+			{
+				$('.rect-first-room').css('opacity', '0.5');
+				$('.rect-first-room').css('background', 'red');
+			}
+		  }
+		  
+		  else if(data.clientid == LOBBY)
+	      {
+
+		  }
+		  	
+		  else if(data.clientid == KITCHEN)
+	      {
+
+		  }		
+	  });
+    </script>
+  </body>
+</html>
