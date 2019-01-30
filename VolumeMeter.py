@@ -3,7 +3,7 @@ import numpy as np
 import sys
 
 RATE = 44100
-CHUNK = int(RATE/1) 	# 1 update per second
+CHUNK = int(RATE/4) 	# 4 update per second
 
 p=pyaudio.PyAudio()
 stream=p.open(format=pyaudio.paInt16,channels=1,rate=RATE,input=True,

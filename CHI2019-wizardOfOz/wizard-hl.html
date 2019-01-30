@@ -1,0 +1,205 @@
+<!doctype html>
+<html>
+  <head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="shortcut icon" type="image/png" href="https://cdns.iconmonstr.com/wp-content/assets/preview/2012/240/iconmonstr-sound-wave-4.png"/>  
+    <title>Home Layout View - Home Sounds</title>
+    <style>
+		body, html {
+		  font: 18px Helvetica, Arial;
+		  height: 100%;
+		  width: 100%;
+		  background-image: url('./map.jpg');
+		  background-repeat: no-repeat;
+		  background-size: 100%;
+		  background-attachment: fixed;
+		}
+		
+		form { padding: 10px; position: absolute; display: none; background-color: rgb(250,250,250);}
+		form button {font: 18px Helvetica, Arial;}
+		#s{ width: 100px; margin-right: 5px; font: 18px Helvetica, Arial;}
+		#l{ width: 26px; margin-right: 5px; font: 18px Helvetica, Arial;}
+	 
+		.container {
+		  width: 200px;
+		  height: 100%;
+		  width: 100%;
+		  margin: 0 auto 0;
+		  -webkit-perspective: 1000;
+		  -webkit-backface-visibility: hidden;
+		}
+
+		.pulse-button {
+		  position: relative;
+		  top: 50%;
+		  left: 50%;
+		  #margin-left: -50px;
+		  #margin-top: -50px;
+		  display: block;
+		  width: 100px;
+		  height: 100px;
+		  font-size: 20px;
+		  font-weight: light;
+		  #font-family: 'Trebuchet MS', sans-serif;
+		  #text-transform: uppercase;
+		  text-align: center;
+		  line-height: 100px;
+		  letter-spacing: 0px;
+		  color: white;
+		  border: none;
+		  border-radius: 50%;
+		  background: #5a99d4;
+		  cursor: pointer;
+		  box-shadow: 0 0 0 0 rgba(90, 153, 212, 0.5);
+		  -webkit-animation: pulse 0.75s infinite;
+		}
+
+		@-webkit-keyframes pulse {
+		  0% {
+			-moz-transform: scale(0.9);
+			-ms-transform: scale(0.9);
+			-webkit-transform: scale(0.9);
+			transform: scale(0.9);
+		  }
+		  70% {
+			-moz-transform: scale(1);
+			-ms-transform: scale(1);
+			-webkit-transform: scale(1);
+			transform: scale(1);
+			box-shadow: 0 0 0 50px rgba(90, 153, 212, 0);
+		  }
+		  100% {
+			-moz-transform: scale(0.9);
+			-ms-transform: scale(0.9);
+			-webkit-transform: scale(0.9);
+			transform: scale(0.9);
+			box-shadow: 0 0 0 0 rgba(90, 153, 212, 0);
+		  }
+		}
+		
+		ul.ui-autocomplete{
+			list-style: none;
+			list-style-type: none;
+		    padding: 4px;
+	   	    margin: 0px;
+	   	    width: 10px;
+	   	    background-color: rgb(250,250,250);
+		}
+		
+		</style>
+  </head>
+  <body>
+    
+	<div class='container'> </div>
+	<form action="">
+		Sound: <input id="s" autocomplete="off" />
+		Loudness: <input id="l" value= "0.5" autocomplete="off" />
+		<button>Send</button>
+	</form>
+    
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js" ></script>
+   
+    <script>
+	
+      $(function () {
+		  
+		var soundsList  =  [
+				"Microwave starts",
+				"Microwave beep",
+				"Water running",
+				"Water dripping",
+				"Cutlery",
+				"Door knock",
+				"Door open",
+				"Door close",
+				"Speech",
+				"Coffee machine",
+				"Bird chirp",
+				"Toilet flush",
+				"Sneezing",
+				"Laughing", 
+				"Shouting",
+				"Squealing",
+				"Laptop open",
+				"Laptop close",
+				"TV open",
+				"TV close",
+				"TV noise",
+				"Chair squeak",
+				"Typing",
+				"AC hum",
+				"Fan hum",
+				"Table tap",
+				"Coughing",
+            ];
+            
+        $( "#s" ).autocomplete({
+			   delay:0,
+			   autoFocus: true,
+			   messages: {
+					noResults: '',
+					results: function() {}
+			   },
+			   source: function (request, response) {
+							var matches = $.map(soundsList, function (acItem) {
+								if (acItem.toUpperCase().indexOf(request.term.toUpperCase()) === 0) {
+									return acItem;
+								}
+							});
+					   response(matches);
+				   }
+            });
+           
+        var socket = io();
+        
+		$('.container').click(function(event) {		  
+		  $('form').css({left:event.pageX, top: event.pageY})
+		  $('#l').val('0.5');
+		  $('form').show();
+		});
+        
+        $('form').submit(function(){
+			
+		  var x = parseInt($('form').css('left'));
+		  var y = parseInt($('form').css('top')); 
+		  
+		  //$('.container').text(y);
+		  //Location hard coded from Aileen's computer parameters
+		  if((x > 160 && y > 35) && (x < 744 && y < 650)) loc = 'Lobby';
+		  else if((x >= 744 && y >= 155) && (x < 1091 && y < 525)) loc = 'Living room';
+		  else if((x >= 744 && y >= 525) && (x < 1091 && y < 650)) loc = 'Kitchen';
+		  else if((x >= 744 && y >= 35) && (x < 1091 && y < 155)) loc = 'Bathroom';
+		  else loc = 'Outside';
+		  
+          socket.emit('sound message', {'sound': $('#s').val(), 'location': loc, 'loudness': $('#l').val(), 'left': $('form').css('left'), 'top': $('form').css('top')});  
+          $('#s').val('');
+          $('#l').val('');
+          $('form').hide();
+          return false;
+        });
+        
+        socket.on('sound message', function(msg){ 
+		  
+		  $('.container').append('<span class="pulse-button"></span>');
+	      $('.pulse-button').text(msg.sound);
+	      
+	      $('.pulse-button').css('top', parseInt(msg.top) - 55 + 'px');
+	      $('.pulse-button').css('left', parseInt(msg.left) - 55 + 'px');
+	      
+		  $('.pulse-button').css('width', msg.loudness*2*100 + 'px');
+		  $('.pulse-button').css('height', msg.loudness*2*100 + 'px');
+	      $('.pulse-button').css('line-height', msg.loudness*2*100 + 'px');
+	      $('.pulse-button').css('font-size', msg.loudness*2*20 + 'px');
+	      
+		  setTimeout(function() {
+		    $('.pulse-button').remove();
+		  }, 3000); 
+       
+        }); 
+               	
+      });
+    </script>
+  </body>
+</html>

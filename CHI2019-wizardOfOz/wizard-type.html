@@ -1,0 +1,192 @@
+<!doctype html>
+<html>
+  <head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">  
+	<link rel="shortcut icon" type="image/png" href="https://cdns.iconmonstr.com/wp-content/assets/preview/2012/240/iconmonstr-sound-wave-4.png"/>
+    <title>Wizard - Home Sounds</title>
+    <style>
+      body { font: 24px Helvetica, Arial; }
+      form { padding: 15px; position: fixed; top: 0; right: 0;}
+      form button {font: 24px Helvetica, Arial;   }
+	  form input { width: 250px; margin-right: 10px; font: 24px Helvetica, Arial;}
+
+	* {
+	  box-sizing: border-box;
+	}
+
+	#myInput {
+	  background-image: url('https://www.w3schools.com/css/searchicon.png');
+	  background-position: 10px 10px;
+	  background-repeat: no-repeat;
+	  width: 100%;
+	  font-size: 18px;
+	  padding: 12px 20px 12px 40px;
+	  border: 1px solid #ddd;
+	  margin-bottom: 12px;
+	  right: 0;
+	}
+
+	#myTable {
+	  border-collapse: collapse;
+	  width: 100%;
+	  border: 1px solid #ddd;
+	  font-size: 20px;
+	}
+
+	#myTable th, #myTable td {
+	  text-align: left;
+	  padding: 12px;
+	}
+
+	#myTable tr {
+	  border-bottom: 1px solid #ddd;
+	}
+
+	#myTable tr.header, #myTable tr:hover {
+	  background-color: #f1f1f1;
+	}  
+	
+	
+	ul.ui-autocomplete{
+			list-style: none;
+			list-style-type: none;
+		    padding: 4px;
+	   	    margin: 0px;
+	   	    width: 10px;
+	   	    background-color: rgb(250,250,250);
+		}
+		
+    .ui-state-focus{
+			padding: 3px;
+	   	    background-color: rgb(200,200,200);
+		}
+    
+    </style>
+  </head>
+  <body>
+    <table id="myTable">
+	  <tr class="header">
+		<th style="width:25%;">Time</th>
+		<th style="width:%;">Sound</th>
+		<th style="width:35%;">Location</th>
+	  </tr>
+	</table>
+	
+	<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js" ></script>
+	
+	<form action="">
+      Sound: <input id="s" autocomplete="off"/>
+      Location: <input id="l" autocomplete="off" />
+      <button>Send</button>
+    </form>
+   
+    <script>
+      $(function () { 
+        var socket = io();
+        
+        var soundsList  =  [
+				"Microwave",
+				"Water",
+				"Cutlery",
+				"Coffee",
+				
+				"Door knock",
+				"Door open",
+				"Door close",
+				"Laptop open",
+				"Laptop close",
+				
+				"Speech",
+				"Laughing", 
+				"Chair squeak",
+				"Typing",
+				"Table tap",
+				
+				"Toilet flush",
+				"Dripping",
+				"Sneezing",
+				
+				"Bird chirp",
+            ];
+            
+        $('#s').keyup(function () {
+		 console.log(jQuery.inArray($('#s').val(), soundsList));	
+		 if(jQuery.inArray($('#s').val(), soundsList) >= 0 && jQuery.inArray($('#s').val(), soundsList) < 4)
+			$('#l').val("Kitchen");
+		 else if(jQuery.inArray($('#s').val(), soundsList) >= 4 && jQuery.inArray($('#s').val(), soundsList) < 9)
+			$('#l').val("Lobby");
+		 else if(jQuery.inArray($('#s').val(), soundsList) >= 9 && jQuery.inArray($('#s').val(), soundsList) < 14)
+			$('#l').val("Living room");
+		 else if(jQuery.inArray($('#s').val(), soundsList) >= 14 && jQuery.inArray($('#s').val(), soundsList) < 17)
+			$('#l').val("Bathroom");			
+		 else if(jQuery.inArray($('#s').val(), soundsList) == 17)
+			$('#l').val("Outside");
+	    });
+            
+        $( "#s" ).autocomplete({
+			   delay:0,
+			   autoFocus: true,
+			   messages: {
+					noResults: '',
+					results: function() {}
+			   },
+			   source: function (request, response) {
+							var matches = $.map(soundsList, function (acItem) {
+								if (acItem.toUpperCase().indexOf(request.term.toUpperCase()) === 0) {
+									return acItem;
+								}
+							});
+					   response(matches);
+				   }
+            });
+            
+            var locationList  =  [
+				"Living room",
+				"Lobby",
+				"Bathroom",
+				"Kitchen",
+				"Outside",
+            ];
+            
+        $( "#l" ).autocomplete({
+			   delay:0,
+			   autoFocus: true,
+			   messages: {
+					noResults: '',
+					results: function() {}
+			   },
+			   source: function (request, response) {
+							var matches = $.map(locationList, function (acItem) {
+								if (acItem.toUpperCase().indexOf(request.term.toUpperCase()) === 0) {
+									return acItem;
+								}
+							});
+					   response(matches);
+				   }
+            });
+        
+        $('form').submit(function(){
+          socket.emit('sound message', {'sound': $('#s').val(), 'location': $('#l').val()});  
+          $('#s').val('');
+          $('#l').val('');
+          $('#s').focus();
+          return false;
+        });
+        
+        socket.on('sound message', function(msg){ 
+          var currentTime = new Date(),
+		  hours = currentTime.getHours(),
+          minutes = currentTime.getMinutes();
+          seconds = currentTime.getSeconds();
+		  if (minutes < 10) {minutes = "0" + minutes;}
+		  if (seconds < 10) {seconds = "0" + seconds;}
+		  
+	      $('#myTable tr:last').after('<tr><td>' + hours + ':' + minutes + ':' + seconds +  '</td> <td>' + msg.sound + '</td> <td>' + msg.location + '</td> </tr>');
+          window.scrollTo(0, document.body.scrollHeight);
+        });
+      });
+    </script>
+  </body>
+</html>
