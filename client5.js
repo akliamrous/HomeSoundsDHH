@@ -1,4 +1,4 @@
-SERVER_ADD="http://172.17.70.145:8080";
+SERVER_ADD="http://128.208.4.172:8080";
 
 /** Client id from commmand line **/
 const id = process.argv.slice(2);

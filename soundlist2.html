@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+  <head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <title>Sound List View - Home Sounds</title>
+    <style>
+      body { font: 24px Helvetica, Arial; }
+
+	* {
+	  box-sizing: border-box;
+	}
+
+	#myTable {
+	  border-collapse: collapse;
+	  width: 100%;
+	  border: 1px solid #ddd;
+	  font-size: 20px;
+	}
+
+	#myTable th, #myTable td {
+	  text-align: left;
+	  padding: 12px;
+	}
+
+	#myTable tr {
+	  border-bottom: 1px solid #ddd;
+	}
+
+	#myTable tr.header, #myTable tr:hover {
+	  background-color: #f1f1f1;
+	}  
+    </style>
+  </head>
+  <body>
+    <table id="myTable">
+	  <tr class="header">
+		<th style="width:40%;">Time</th>
+		<th style="width:10%;">Level</th>
+		<th style="width:20%;">Location</th>
+		<th style="width:%;">Duration</th>
+	  </tr>
+	  
+	  <tr> <td>10:07:45</td> <td>Microwave beep</td> <td>Kitchen</td> <td>Kitchen</td> </tr>
+      <tr> <td>10:08:01</td> <td>Bird chirp</td> <td>Outside</td> <td>Kitchen</td></tr>
+	  <tr> <td>10:08:38</td> <td>Clap</td> <td>Dining</td> <td>Kitchen</td></tr>
+      <tr> <td>16:05:41</td> <td>Liquid pour</td> <td>Dining</td> <td>Kitchen</td> </tr>	
+	</table>
+  
+    <script>
+	/**** Data from Socket ****/
+      var socket = io.connect();
+      socket.on('responseFromHttpServer', function(data){
+		  
+		  data = JSON.parse(data);
+          var currentTime = new Date(),
+		  hours = currentTime.getHours(),
+          minutes = currentTime.getMinutes();
+          seconds = currentTime.getSeconds();
+		  if (minutes < 10) {minutes = "0" + minutes;}
+		  if (seconds < 10) {seconds = "0" + seconds;}
+		  
+		  if(data.absLoudLevel != "Blank")
+			$('#myTable tr:last').after('<tr><td>' + hours + ':' + minutes + ':' + seconds +  '</td> <td>' + data.absLoudLevel + '</td> <td>' + data.clientid + '</td> <td>'  + 'Demo' + '</td> </tr>');
+          window.scrollTo(0, document.body.scrollHeight);
+      });
+    </script>
+	
+  </body>
+</html>

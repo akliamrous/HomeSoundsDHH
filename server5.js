@@ -71,8 +71,15 @@ httpListener.sockets.on('connection', function(socket){
 		//console.log((new Date()) + " Server: Received from data client %s: %s", data.clientid, data.dataFromDataClient); //Print Data from client
 		
 		/* Do some processing and logging here... example: FILTERING AND DETERMINING HIGH MED LOW AND DURATION */
+		var absSoundLevel = "Blank";
+		if(parseFloat(data.dataFromDataClient) > 10.0)
+			absSoundLevel = "Loud";
+		else if(parseFloat(data.dataFromDataClient) > 5.0)
+			absSoundLevel = "Med";
+		else if(parseFloat(data.dataFromDataClient) > 1.0)
+			absSoundLevel = "Low";
 		
-		socket.broadcast.emit('responseFromHttpServer', JSON.stringify({dataFromHttpServer: data.dataFromDataClient, absLoudLevel: "Loud", clientid: data.clientid})); // Sending to all clients except sender
+		socket.broadcast.emit('responseFromHttpServer', JSON.stringify({dataFromHttpServer: data.dataFromDataClient, absLoudLevel: absSoundLevel, clientid: data.clientid})); // Sending to all clients except sender
 		// socket.emit(...); // Sends to the sender.
 		// httpListener.sockets.emit OR io.emit // sends to all.
 	});

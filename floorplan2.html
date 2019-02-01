@@ -40,10 +40,7 @@
 		span {
 		  position: absolute;
 		  left: 50%;
-		  opacity: 20%;
-		  background: yellow;
-		  opacity: 0;
-		  transition: opacity .2s;
+		  transition: opacity .5s;
 		}
 			.rect-first-room{
 			  /*Define individual room layout here */
@@ -53,6 +50,13 @@
 			  /*Define individual room layout here */
 			  width: 47%; height: 62%; transform: translate(-50%, 6.4%);
 			}
+		.p {
+			position: absolute;
+			top: 50%; left: 50%; transform: translate(-50%, -50%);
+			opacity: 1;
+			color: #fff;
+			vertical-align: middle;
+		}
 	
   </style>
   </head>
@@ -60,11 +64,13 @@
 	<div class='container'>	
 		<img class="img-first-room" src="./dj-office.JPG">
 		<span class="rect-first-room"></span>
+		<div class="p" id="text-first-room"><p>Blank</p></div>
 	</div>
 	
 	<div class='container'>	
 		<img class="img-second-room" src="./jon-office.jpg">
 		<span class="rect-second-room"></span>
+		<div class="p" id="text-second-room"><p>Blank</p></div>
 	</div>
    
     <script>
@@ -76,24 +82,61 @@
 		  
 		  data = JSON.parse(data);
 		  
-		  
+		  console.log("Floorplan Data:" + parseFloat(data.dataFromHttpServer) + " Room:" +  data.clientid + " Level:" + data.absLoudLevel);  
+
 		  if(data.clientid == FIRST_ROOM)
 	      {
-			y1 = parseFloat(data.dataFromHttpServer);
-			console.log("Floorplan dj-office:" + y1 + data.absLoudLevel);  
+			$('#text-first-room').text(data.absLoudLevel);
+			
 			if (data.absLoudLevel == "Loud")
 			{
-				$('.rect-first-room').css('opacity', '0.5');
-				$('.rect-first-room').css('background', 'red');
+				$('.rect-first-room').css('opacity', '0.6');
+				$('.rect-first-room').css('background', 'rgb(255,80,80)');
+			}
+			else if (data.absLoudLevel == "Med")
+			{
+				$('.rect-first-room').css('opacity', '0.8');
+				$('.rect-first-room').css('background', 'rgb(254,212,226)');
+			}
+			else if (data.absLoudLevel == "Low")
+			{
+				$('.rect-first-room').css('opacity', '0.2');
+				$('.rect-first-room').css('background', 'rgb(253,243,184)');
+			}
+			else
+			{
+				$('.rect-first-room').css('opacity', '0');
+				$('.rect-first-room').css('background', '#fff');
 			}
 		  }
 		  
-		  else if(data.clientid == LOBBY)
+		  else if(data.clientid == SECOND_ROOM)
 	      {
-
+			  $('#text-second-room').text(data.absLoudLevel);
+			
+			if (data.absLoudLevel == "Loud")
+			{
+				$('.rect-second-room').css('opacity', '0.6');
+				$('.rect-second-room').css('background', 'rgb(255,80,80)');
+			}
+			else if (data.absLoudLevel == "Med")
+			{
+				$('.rect-second-room').css('opacity', '0.8');
+				$('.rect-second-room').css('background', 'rgb(254,212,226)');
+			}
+			else if (data.absLoudLevel == "Low")
+			{
+				$('.rect-second-room').css('opacity', '0.2');
+				$('.rect-second-room').css('background', 'rgb(253,243,184)');
+			}
+			else
+			{
+				$('.rect-second-room').css('opacity', '0');
+				$('.rect-second-room').css('background', '#fff');
+			}
 		  }
 		  	
-		  else if(data.clientid == KITCHEN)
+		  else if(data.clientid == THIRD_ROOM)
 	      {
 
 		  }		

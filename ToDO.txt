@@ -1,22 +1,23 @@
 ToDo:
 
-1. Floorplan backend: Server recognizes high, med, low, blank. (very basic - heuristic)
-
-2. Fix soundlist: remove search
-convert sound -> loudness
-location whatever
-
-3.  Test with tablet -- basically two systems
-
-Then you can show to Jon...
-
 4. Logging - High, med, low, and time...
 
 5. Implementing "duration" of high, med, low in server  (+ log) and in list view
 
-6. Change waveform...
+7. Reading Jon's slides, web codes, implement sound event recognition well. 
 
-7. Noise filter convert to a more sophisticated high med low
+8. Fix and test backend (it sometimes stops updating for some reason... maybe have one web client connection instead of 3? or maybe not?). do noise filtering as well
 
-8. ..... Somewhere.. Fix and test backend. 
+9. Zoom using css zoom and touchscreen.. (no scroll, for now can also just switch for Jon)
 
+10. Screen bars (delimiters) sould be 1px grey
+
+11. Put some basic furniture in floorplan and use circles instead of boxes. 
+
+12. Adjust y-axis scales on waveform so that all waveforms have common values. Also make sure if max-data is less than say 0.1, just make everything 0 or something.
+
+Done: 
+1. Floorplan backend: Server recognizes high, med, low, blank. (very basic - heuristic)
+2. Fix soundlist: remove search, convert sound -> loudness, location whatever
+3. Test with tablet -- basically two systems
+6. Change waveform... (use data from python and some d3 generating library..)
