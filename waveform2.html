@@ -51,20 +51,14 @@
 		}
 		.waveform .svg1 g rect {
 		  fill:     red;
-		  opacity:  0.5;
+		  //opacity:  0.5;
 		}
 		.waveform .svg2 g rect {
 		  fill:     green;
-		  opacity:  0.5;
-		}
-		.soundcloud_embed {
-		  display:     none;
-		  opacity:     0.5;
-		  margin-left: 40px;
-		  width:       968px;
-		  /* weird padding offset; SC embed is slightly too short? */
+		  //opacity:  0.5;
 		}
 		.axis {
+		  position: absolute;
 		  position: absolute;
 		  top:      4px;
 		  left:    -40px;
@@ -74,7 +68,7 @@
 		}
 		.axis g text {
 		  font-family: 'Roboto', sans-serif;
-		  opacity:      0.5;
+		  opacity:      0.5;											//Opacity reduces performance
 		  font-size:    10px;
 		}
     </style> 
@@ -90,52 +84,66 @@
     </div>
 
     <script>
+	/* Performance is increased by reducing the number of data points or by reducing data update time.
+	 * If you reduce the number of data points, the granurality is lower and hence you can use the functions below (divide by 2 etc.) to make it all look better.
+	 * Another trick (not recommended) is to increase the data update time while also increasing the points (coz generating 512 point time is not double of 256 point time)
+	 * This way the eye wouldn't see big lines moving too fast....
+	 */
 		var FIRST_ROOM = "dj-office", SECOND_ROOM = "jon-office", THIRD_ROOM = "dj-home";
 		
-		var wave_json1 = wave_json2 = Array.from({length: 1024}, () => 0);
-		
-		var max_points = 1024;
-		var width = 880, height = 140; 		//$(".svg").css(width),
+		var wave_json1 = wave_json2 = Array.from({length: 256}, () => 0.0);						// Number of points  = 256. Orig = 1024 (which increases granurality but decreases performance and also decreases speed of update of waveform)
+		var width = 880, height = 140; 		
+		var min_max_val = 1.25;							// IMP: CHANGE BASED ON MIC VOLUME AND HOW IT LOOKS. Remeber that graph doesn't show all value.
+		var max_val = min_max_val;
 		
 		/**** Data from Socket ****/
-		  var socket = io.connect();
-		  socket.on('responseFromHttpServer', function(data){
-			  
+		  var socket = io.connect();					//URL is windows.location (url address of the webpage), timeout: 5 days
+		  
+		  // Send handshake
+		  socket.on('connect', function () {
+			//socket.receiveBuffer.length = 0;			//Clear buffer
+			//socket.sendBuffer.length = 0;
+			console.log("Waveform connected to server!");
+			socket.emit('handshake', "http-waveform");
+		  });
+		  
+		  socket.on('responseFromHttpServer', function(data){	
 			  data = JSON.parse(data);
-			  
 			  if(data.clientid == FIRST_ROOM)
 			  {
 				y1 = parseFloat(data.dataFromHttpServer);
 				wave_json1.shift();
 				wave_json1.push(y1);
-				console.log("Waveform 1:" + y1);
 				d3.selectAll(".svg1 svg").remove();
-				svg_render(wave_json1, ".waveform > .svg1" );
-			  }	
+				svg_render(wave_json1, ".waveform > .svg1", max_val);		// Note that max_val is updated in the next cycle
+			  }
 			  
 			  if(data.clientid == SECOND_ROOM)
 			  {
 				y2 = parseFloat(data.dataFromHttpServer);
 				wave_json2.shift();
 				wave_json2.push(y2);
-				console.log("Waveform 2:" + y2);
 				d3.selectAll(".svg2 svg").remove();
-				svg_render(wave_json2, ".waveform > .svg2" );
-			  }	
+				svg_render(wave_json2, ".waveform > .svg2", max_val);
+			  }
+			  
+			  /* To handle that all waveforms have same y scales */
+			  max_val = d3.max(wave_json1.concat(wave_json2), function(d) { return d; });	//Concat arrays based on number of waveforms
+			  if (max_val < min_max_val) max_val = min_max_val;				 				// If volume is too low, don't want the scale to show high //
 		  });
 
 		/**** Waveform *****/
-		function svg_render(data, svg) {
+		function svg_render(data, svg, max_val) {
 		  var node = d3.select(svg).append("svg")
 			.attr("class","chart")
 			.attr("width", width)
 			.attr("height", height);
 
 		  var y = d3.scale.linear().range([height, -height]);
-		  var max_val = d3.max(data, function(d) { return d; });
+		  
 		  y.domain([-max_val, max_val]);
 		  var x = d3.scale.linear().domain([0, data.length]);
-		  var bar_width = width / data.length;
+		  var bar_width = width / (data.length*2);							// Dividing by 2 reduces the number of path points. This allows to reduce the array length above while keeping same granularity (width of bars) by introducing space between the bars
 
 		  var chart = node.attr("width", width).attr("height", height);
 
@@ -143,7 +151,7 @@
 			.data(data)
 			.enter().append("g") // svg "group"
 			.attr("transform", function(d, i) {
-			  return "translate(" + i * bar_width + ",0)";
+			  return "translate(" + i * bar_width * 2 + ",0)";				// Multiplying by 2 reduces the number of path points by adding space between points
 			});
 
 		  bar.append("rect")
@@ -155,6 +163,8 @@
 			  return Math.abs(y(d)); })
 			.attr("width", bar_width );
 
+		  /* Removed axis to improve performance */
+		  
 		  var axis = d3.svg.axis()
 			.scale(y)
 			.ticks(12)
@@ -167,11 +177,16 @@
 			.append("g")
 			.attr("transform", "translate(40," + (height/2) + ")" )
 			.call(axis);
+		
 		}
 
 		function d( s ) {
 		  console.log( "log: " + s );
 		}
+		
+	  /** Error Handling. See: https://socket.io/docs/client-api/ **/
+	  socket.on('connect_error', function() {console.log("Waveform: connect_error or connect_timeout");});
+	  socket.on('disconnect', function() {console.log("Waveform: disconnected");});
     </script>
   </body>
 </html>
