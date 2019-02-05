@@ -5,15 +5,17 @@
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 	<title>Floorplan View - Home Sound</title>
 	<style>
-	  body, html {
+	  html, body {
 		  font: 18px Helvetica, Arial;
-		  height: 100%;
+		  height: 99.7%;											/* Weird offset */	
+		  margin: 0;
+		  padding: 0;
 		}
 		.container {
 		  position: relative;
 		  height: 100%;
-		  width: 100%;
-		  display: block;
+		  width: 100%;											/* Just change width to accommodate multiple floor. Eg. 49% for two floors*/
+		  display: inline-block;
 		  margin: 0;
 		}
 		img {
@@ -97,13 +99,13 @@
 		<span class="pulse-button pulse-button-first-room"><p>Blank</p></span>
 	</div>
 	
-	<div class='container'>	
+	<!--<div class='container'>	
 		<img class="img-second-room" src="./jon-office.jpg">
 		<span class="pulse-button pulse-button-second-room"><p>Blank</p></span>
-	</div>
+	</div> -->
    
   <script>
-	var FIRST_ROOM = "dj-office", SECOND_ROOM = "jon-office", THIRD_ROOM = "dj-home";
+	var FIRST_ROOM = "dj-home", SECOND_ROOM = "jon-office", THIRD_ROOM = "dj-office";
 	
 	/**** Data from Socket ****/
       var socket = io.connect({'reconnection': true, 'timeout': 5*86400*1000});					//URL is windows.location (url address of the webpage), timeout: 5 days
@@ -112,7 +114,7 @@
 	  socket.on('connect', function () {
 		//socket.receiveBuffer = [];			//Clear buffer
 		console.log("Floorplan connected to server!");
-		socket.emit('handshake', "http-floorplan");
+		socket.emit('handshake-web', "http-floorplan");
 	  });      
       
       socket.on('responseFromHttpServer', function(data){
@@ -134,7 +136,7 @@
 		
 		if (loudLevel == "Loud")
 			{
-				$('.' + clas).css('background', 'rgba(90, 153, 212, 0.8)');
+				$('.' + clas).css('background', 'rgba(90, 153, 212, 0.9)');
 				$('.' + clas).css('box-shadow', '0 0 0 0 rgba(90, 153, 212, 0.5)');
 				$('.' + clas).css('height', '120px'); $('.' + clas).css('width', '120px');
 				$('.' + clas).css('margin-top', '-60px'); $('.' + clas).css('margin-left', '-60px');	
@@ -143,7 +145,7 @@
 			}
 			else if (loudLevel == "Med")
 			{
-				$('.' + clas).css('background', 'rgba(90, 153, 212, 0.6)');
+				$('.' + clas).css('background', 'rgba(90, 153, 212, 0.75)');
 				$('.' + clas).css('box-shadow', '0 0 0 0 rgba(90, 153, 212, 0.4)');
 				$('.' + clas).css('height', '100px'); $('.' + clas).css('width', '100px');
 				$('.' + clas).css('margin-top', '-50px'); $('.' + clas).css('margin-left', '-50px');
@@ -151,7 +153,7 @@
 			}
 			else if (loudLevel == "Low")
 			{
-				$('.' + clas).css('background', 'rgba(90, 153, 212, 0.4)');
+				$('.' + clas).css('background', 'rgba(90, 153, 212, 0.6)');
 				$('.' + clas).css('box-shadow', '0 0 0 0 rgba(90, 153, 212, 0.3)');
 				$('.' + clas).css('height', '80px'); $('.' + clas).css('width', '80px');
 				$('.' + clas).css('margin-top', '-40px'); $('.' + clas).css('margin-left', '-40px');

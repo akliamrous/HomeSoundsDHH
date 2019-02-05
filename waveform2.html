@@ -8,11 +8,11 @@
     <script src="/socket.io/socket.io.js"></script>
     <title>d3 audio waveforms</title>
     
-    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Roboto:400,100|Raleway:400,200|Amatic+SC">
+    <!--<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Roboto:400,100|Raleway:400,200|Amatic+SC"> -->
     <style>
 		* {
 		  margin:      0;
-		  font-family: 'Amatic SC', cursive;
+		  font-family: Helvetica, Arial;
 		}
 		html {
 		  margin: 1.0em;
@@ -39,11 +39,13 @@
 		  margin-left:  40px;
 		  padding:      2px;
 		  position:     relative;
-		  width:        800px;
+		  width:        600px;												/* Change width to incorporate more elements, but reduce points */
+		  display:  	inline-block;
 		}
 		.waveform h2 {
 		  margin-left:  40px;
-		  font-size:    36px;
+		  font-size:    22px;
+		  color: 		#666;
 		}
 		.waveform > div div.bar {
 		  background-color:  red;
@@ -76,25 +78,27 @@
   <body>
     <div class="page">
       <div class="waveform">
-        <div class="svg svg1"></div>
-        <div class="svg svg2"></div>
+		<h2>DJ's Home</h2>
+        <div class="svg1"></div>									
+        <div class="svg2"></div>								<!-- Uncomment this -->
       </div>
     </div>
 
     <script>
-	/* Performance is increased by reducing the number of data points or by reducing data update time.
+	/* Performance is increased by reducing the number of data points or by reducing data updatae time.
 	 * If you reduce the number of data points, the granurality is lower and hence you can use the functions below (divide by 2 etc.) to make it all look better.
-	 * Another trick (not recommended) is to increase the data update time while also increasing the points (coz generating 512 point time is not double of 256 point time)
+	 * Another trick (not recommended) is to increase the data updatae time while also increasing the points (coz generating 512 point time is not double of 256 point time)
 	 * This way the eye wouldn't see big lines moving too fast....
 	 */
-		var FIRST_ROOM = "dj-office", SECOND_ROOM = "jon-office", THIRD_ROOM = "dj-home";
+		var dataClientNames = [];
 		
-		var wave_json1 = wave_json2 = Array.from({length: 256}, () => 0.0);						// Number of points  = 256. Orig = 1024 (which increases granurality but decreases performance and also decreases speed of update of waveform)
-		var width = 800, height = 140; 		
-		var min_max_val = 1.25;							// IMP: CHANGE BASED ON MIC VOLUME AND HOW IT LOOKS. Remeber that graph doesn't show all value.
+		var wave_json1 = Array.from({length: 256}, () => 0.0);						// Number of points  = 256. Orig = 1024 (which increases granurality but decreases performance and also decreases speed of updatae of waveform)
+		var wave_json2 = Array.from({length: 256}, () => 0.0);
+		var width = 600, height = 140; 		
+		var min_max_val = 1.5;							// IMP: CHANGE BASED ON MIC VOLUME AND HOW IT LOOKS. Remeber that graph doesn't show all value.
 		var max_val = min_max_val;
 		
-		/**** Data from Socket ****/
+		/**** data from Socket ****/
 		  var socket = io.connect();					//URL is windows.location (url address of the webpage), timeout: 5 days
 		  
 		  // Send handshake
@@ -102,32 +106,44 @@
 			//socket.receiveBuffer.length = 0;			//Clear buffer
 			//socket.sendBuffer.length = 0;
 			console.log("Waveform connected to server!");
-			socket.emit('handshake', "http-waveform");
+			socket.emit('handshake-web', "http-waveform");
+		  });
+		  
+		  socket.on('handshake-server', function (data) {
+			dataClientNames = data;
+			console.log(data);
 		  });
 		  
 		  socket.on('responseFromHttpServer', function(data){	
 			  data = JSON.parse(data);
-			  if(data.clientid == FIRST_ROOM)
+			  if(dataClientNames.length > 0 && data.clientid == dataClientNames[0])		//Data clients are stored in an array
 			  {
+				console.log("here");  
 				y1 = parseFloat(data.dataFromHttpServer);
 				wave_json1.shift();
 				wave_json1.push(y1);
+				
+				/* To handle that all waveforms have same y scales */
+				max_val = d3.max(wave_json1.concat(wave_json2), function(d) { return d; });	//Concat arrays based on number of waveforms
+				if (max_val < min_max_val) max_val = min_max_val;				 				// If volume is too low, don't want the scale to show high //
+				
 				d3.selectAll(".svg1 svg").remove();
-				svg_render(wave_json1, ".waveform > .svg1", max_val);		// Note that max_val is updated in the next cycle
+				svg_render(wave_json1, ".waveform > .svg1", max_val);		// Note that max_val is updataed in the next cycle
 			  }
 			  
-			  if(data.clientid == SECOND_ROOM)
+			  if(dataClientNames.length > 1 && data.clientid == dataClientNames[1])
 			  {
 				y2 = parseFloat(data.dataFromHttpServer);
 				wave_json2.shift();
 				wave_json2.push(y2);
+				
+				/* To handle that all waveforms have same y scales */
+				max_val = d3.max(wave_json1.concat(wave_json2), function(d) { return d; });	//Concat arrays based on number of waveforms
+				if (max_val < min_max_val) max_val = min_max_val;				 				// If volume is too low, don't want the scale to show high //
+				
 				d3.selectAll(".svg2 svg").remove();
 				svg_render(wave_json2, ".waveform > .svg2", max_val);
 			  }
-			  
-			  /* To handle that all waveforms have same y scales */
-			  max_val = d3.max(wave_json1.concat(wave_json2), function(d) { return d; });	//Concat arrays based on number of waveforms
-			  if (max_val < min_max_val) max_val = min_max_val;				 				// If volume is too low, don't want the scale to show high //
 		  });
 
 		/**** Waveform *****/
@@ -143,9 +159,7 @@
 		  var x = d3.scale.linear().domain([0, data.length]);
 		  var bar_width = width / (data.length*2);							// Dividing by 2 reduces the number of path points. This allows to reduce the array length above while keeping same granularity (width of bars) by introducing space between the bars
 
-		  var chart = node.attr("width", width).attr("height", height);
-
-		  var bar = chart.selectAll("g")
+		  var bar = node.selectAll("g")
 			.data(data)
 			.enter().append("g") // svg "group"
 			.attr("transform", function(d, i) {
@@ -162,7 +176,7 @@
 			.attr("width", bar_width );
 
 		  /* Removed axis to improve performance */
-		  /*
+		  
 		  var axis = d3.svg.axis()
 			.scale(y)
 			.ticks(12)
@@ -175,7 +189,6 @@
 			.append("g")
 			.attr("transform", "translate(40," + (height/2) + ")" )
 			.call(axis);
-		 */
 		}
 
 		function d( s ) {

@@ -3,6 +3,7 @@ var http = require('http');
 var fs = require('fs'), bite_size = 256, readbytes = 0, file;
 var path = require('path');
 var io = require('socket.io');
+var port = 8080;
 
 const winston = require('winston');
 const MESSAGE = Symbol.for('message');
@@ -65,17 +66,18 @@ var server = http.createServer(function (request, response) {
             response.end(content, 'utf-8');
         }
     });
-}).listen(8080);
-var clients = {};								
+}).listen(port);
+var clients = {};
+var dataClientNames = [];								
 var httpListener = io.listen(server);
-console.log((new Date()).toLocaleString() + " Server: Ready to roll.");
+console.log((new Date()).toLocaleString() + " Server: Ready to roll on port " + port + ".");
 
 httpListener.sockets.on('connection', function(socket){
 
 	//socket.sendBuffer.length = 0;				//Clear the send buffer to avoid overloading the web client. We don't care about missed data except for Soundlist (ToDO later).
 	clients[socket.id] = socket;				//For keeping track of clients and cleaning up on disconnect
 	//console.log((new Date()).toLocaleString() + " Server: A client connected.");
-    
+    socket.emit('handshake-server',  dataClientNames);
     var clientid = "http";
     var numOfSamplesPerSec = 4;				//CHANGE BASED ON PYTHON CODE
     var lengthOfGapInSec = 1;				//Expected pause for an event to be marked
@@ -128,7 +130,14 @@ httpListener.sockets.on('connection', function(socket){
 		event = "Blank"; duration = 0.0; //Reset events
 	});
 	
-	socket.on('handshake', function(id){
+	socket.on('handshake-data', function(id){
+		console.log((new Date()).toLocaleString() + " Server: Client " + id + " connected."); 
+		logger.info('connected', {Time: (new Date()).toLocaleString(), clientid: id});
+		clientid = id;
+		dataClientNames.push(id);
+	});
+	
+	socket.on('handshake-web', function(id){
 		console.log((new Date()).toLocaleString() + " Server: Client " + id + " connected."); 
 		logger.info('connected', {Time: (new Date()).toLocaleString(), clientid: id});
 		clientid = id;
@@ -142,9 +151,9 @@ httpListener.sockets.on('connection', function(socket){
 });
 
 function absSoundLevelCalc(value) {
-	if(value > 10.0)
+	if(value > 4.0)
 		return "Loud";
-	else if(value > 5.0)	
+	else if(value > 2.0)	
 		return "Med";
 	else if(value > 1.0)
 		return "Low";

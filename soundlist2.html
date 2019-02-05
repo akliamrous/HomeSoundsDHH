@@ -58,7 +58,7 @@
 	  socket.on('connect', function () {
 		//socket.receiveBuffer = [];			//Clear buffer
 		console.log("Soundlist connected to server!");
-		socket.emit('handshake', "http-soundlist");
+		socket.emit('handshake-web', "http-soundlist");
 	  });
       
       socket.on('responseFromHttpServer', function(data){

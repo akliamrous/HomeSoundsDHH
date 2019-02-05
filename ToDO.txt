@@ -1,23 +1,17 @@
 ToDo:
 
-7.a Read Jon's slides.
-
-9. Zoom using css zoom and touchscreen.. (no scroll, for now can also just switch for Jon)
-
-10. Screen bars (delimiters) sould be 1px grey. Soundlist column width adjust to look better.
-
 11a. Put some basic furniture in floorplan
+
+7.a Read Jon's slides.
 
 16. Logging client interactions.
 
 17. Times should be coordinated by server. Also, just have one variable in server that is sent across all data and soundlist2 client (e.g. lengthOfGapInSec, numberOfSamplesPerSec)
-
-19. Seting low, high med values.
+21. Server should send data client names and number of data clients to web clients  during handshake, and web clients should configure accordingly (eg. waveform should automatically add or remove number of waveforms, floorplan should adjust views and add names) - 1 hour (only after Jon approves design...) 
 
 Maybes: 
 14. Maybe use one socket for all 3 web client for second deployment once you know that all 3 are required...
 15. (Later) For soundlist, figure out a way to display past missed data as well. (Ooooh!)
-
 
 Done: 
 1. Floorplan backend: Server recognizes high, med, low, blank. (very basic - heuristic)
@@ -28,9 +22,13 @@ Done:
 6. Change waveform... (use data from python and some d3 generating library..)
 7. Reading Jon's slides, web codes,implement sound event recognition well.
 8. Fix and test backend (it sometimes stops updating for some reason... maybe have one web client connection instead of 3? or maybe not?). do noise filtering as well
+9. Zoom using css zoom and touchscreen.. (no scroll, for now can also just switch for Jon)
+10. Screen bars (delimiters) sould be 1px grey. Soundlist column width adjust to look better.
 11b. and use circles instead of boxes in floorplan.  
 12. Adjust y-axis scales on waveform so that all waveforms have common values. Also make sure if max-data is less than say 0.1, just make everything 0.1 and increase scale to 1 or something.
 18. Sometimes the console gets stuck and control C runs the process. (Because of having child.stdout.on everytime the socket.on is connected)
+19. Seting low, high med values.
+20. Waveform update error fix.
 
 
 REMEMBER: IF YOU CHANGE 	UPDATE TIME, YOU HAVE TO CHANCE SERVER AND WAVEFORM. AND "RESTART EVERYTHING"
