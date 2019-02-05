@@ -4,6 +4,19 @@ var fs = require('fs'), bite_size = 256, readbytes = 0, file;
 var path = require('path');
 var io = require('socket.io');
 
+const winston = require('winston');
+const MESSAGE = Symbol.for('message');
+const jsonFormatter = (logEntry) => {	
+  const json = Object.assign(logEntry)
+  logEntry[MESSAGE] = JSON.stringify(json);
+  return logEntry;
+}
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format(jsonFormatter)(),
+  transports: new winston.transports.File({filename:'homesounds-server.log'}),
+});
+
 var server = http.createServer(function (request, response) { 
   
   var filePath = '.' + request.url;
@@ -58,6 +71,7 @@ var httpListener = io.listen(server);
 console.log((new Date()).toLocaleString() + " Server: Ready to roll.");
 
 httpListener.sockets.on('connection', function(socket){
+
 	//socket.sendBuffer.length = 0;				//Clear the send buffer to avoid overloading the web client. We don't care about missed data except for Soundlist (ToDO later).
 	clients[socket.id] = socket;				//For keeping track of clients and cleaning up on disconnect
 	//console.log((new Date()).toLocaleString() + " Server: A client connected.");
@@ -90,6 +104,13 @@ httpListener.sockets.on('connection', function(socket){
 					event = absSoundLevelCalc(peak);
 					duration = 	(numOfSamplesReceived - numOfBlankSamples)/numOfSamplesPerSec;
 					numOfSamplesReceived = 0;
+	
+					if(event!="Blank")
+					{
+						var date = new Date();
+						date.setSeconds(date.getSeconds() - duration - lengthOfGapInSec);
+						logger.info('sound event', {Time: date.toLocaleString(), Location: data.clientid, Event: event, duration: duration + "s"});
+					}
 					//Reset peak
 					peak = 0.0;
 				}
@@ -109,12 +130,14 @@ httpListener.sockets.on('connection', function(socket){
 	
 	socket.on('handshake', function(id){
 		console.log((new Date()).toLocaleString() + " Server: Client " + id + " connected."); 
+		logger.info('connected', {Time: (new Date()).toLocaleString(), clientid: id});
 		clientid = id;
 	});
 	
 	socket.on('disconnect', function() {
 		delete clients[socket.id];								//Clean up socket on disconnect
 		console.log((new Date()).toLocaleString() + " Server: Client " + clientid + " disconnected.");
+		logger.info('disconnected', {Time: (new Date()).toLocaleString(), clientid: clientid});
 	});
 });
 

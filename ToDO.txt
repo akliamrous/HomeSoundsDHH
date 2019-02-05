@@ -2,8 +2,6 @@ ToDo:
 
 7.a Read Jon's slides.
 
-4. Logging - Data client id (location), timestamp, loudnessLevel, and duration (just like sound list). And client disconnect, connect events.
-
 9. Zoom using css zoom and touchscreen.. (no scroll, for now can also just switch for Jon)
 
 10. Screen bars (delimiters) sould be 1px grey. Soundlist column width adjust to look better.
@@ -12,20 +10,27 @@ ToDo:
 
 16. Logging client interactions.
 
+17. Times should be coordinated by server. Also, just have one variable in server that is sent across all data and soundlist2 client (e.g. lengthOfGapInSec, numberOfSamplesPerSec)
+
+19. Seting low, high med values.
+
 Maybes: 
 14. Maybe use one socket for all 3 web client for second deployment once you know that all 3 are required...
 15. (Later) For soundlist, figure out a way to display past missed data as well. (Ooooh!)
+
 
 Done: 
 1. Floorplan backend: Server recognizes high, med, low, blank. (very basic - heuristic)
 2. Fix soundlist: remove search, convert sound -> loudness, location whatever
 3. Test with tablet -- basically two systems
+4. Logging - Data client id (location), timestamp, loudnessLevel, and duration (just like sound list). And client disconnect, connect events.
 5. Implementing "duration" of high, med, low in server  (+ log) and in list view
 6. Change waveform... (use data from python and some d3 generating library..)
 7. Reading Jon's slides, web codes,implement sound event recognition well.
 8. Fix and test backend (it sometimes stops updating for some reason... maybe have one web client connection instead of 3? or maybe not?). do noise filtering as well
 11b. and use circles instead of boxes in floorplan.  
 12. Adjust y-axis scales on waveform so that all waveforms have common values. Also make sure if max-data is less than say 0.1, just make everything 0.1 and increase scale to 1 or something.
+18. Sometimes the console gets stuck and control C runs the process. (Because of having child.stdout.on everytime the socket.on is connected)
 
 
 REMEMBER: IF YOU CHANGE 	UPDATE TIME, YOU HAVE TO CHANCE SERVER AND WAVEFORM. AND "RESTART EVERYTHING"
@@ -41,3 +46,4 @@ Testing:
 4. Short time disconnecting, connecting with all 3 web clients and 1 data client. Not a problem.
 
 #5. Pilot test with home... (2-5 data clients, 6-15 web sockets).
+#Problem: Web client connects to server again, data is really fast... (which spoils with timing).. Something wrong from the data client side... it starts sending fast... (reconnecting data client solves the problem..)

@@ -39,7 +39,7 @@
 		  margin-left:  40px;
 		  padding:      2px;
 		  position:     relative;
-		  width:        880px;
+		  width:        800px;
 		}
 		.waveform h2 {
 		  margin-left:  40px;
@@ -76,10 +76,8 @@
   <body>
     <div class="page">
       <div class="waveform">
-        <div class="svg svg1">	
-        </div>
-        <div class="svg svg2">
-		</div>
+        <div class="svg svg1"></div>
+        <div class="svg svg2"></div>
       </div>
     </div>
 
@@ -92,7 +90,7 @@
 		var FIRST_ROOM = "dj-office", SECOND_ROOM = "jon-office", THIRD_ROOM = "dj-home";
 		
 		var wave_json1 = wave_json2 = Array.from({length: 256}, () => 0.0);						// Number of points  = 256. Orig = 1024 (which increases granurality but decreases performance and also decreases speed of update of waveform)
-		var width = 880, height = 140; 		
+		var width = 800, height = 140; 		
 		var min_max_val = 1.25;							// IMP: CHANGE BASED ON MIC VOLUME AND HOW IT LOOKS. Remeber that graph doesn't show all value.
 		var max_val = min_max_val;
 		
@@ -164,7 +162,7 @@
 			.attr("width", bar_width );
 
 		  /* Removed axis to improve performance */
-		  
+		  /*
 		  var axis = d3.svg.axis()
 			.scale(y)
 			.ticks(12)
@@ -177,7 +175,7 @@
 			.append("g")
 			.attr("transform", "translate(40," + (height/2) + ")" )
 			.call(axis);
-		
+		 */
 		}
 
 		function d( s ) {

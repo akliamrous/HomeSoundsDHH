@@ -6,7 +6,7 @@
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <title>Sound List View - Home Sounds</title>
     <style>
-      body { font: 24px Helvetica, Arial; }
+    body { font: 18px Helvetica, Arial; }
 
 	* {
 	  box-sizing: border-box;
@@ -16,7 +16,6 @@
 	  border-collapse: collapse;
 	  width: 100%;
 	  border: 1px solid #ddd;
-	  font-size: 20px;
 	}
 
 	#myTable th, #myTable td {
@@ -36,10 +35,10 @@
   <body>
     <table id="myTable">
 	  <tr class="header">
-		<th style="width:40%;">Time</th>
-		<th style="width:10%;">Level</th>
-		<th style="width:20%;">Location</th>
-		<th style="width:%;">Duration</th>
+		<th style="width:30%;">Time</th>
+		<th style="width:20%;">Level</th>
+		<th style="width:30%;">Location</th>
+		<th style="width:%;">Length</th>
 	  </tr>
 	  <!--
 	  <tr> <td>10:07:45</td> <td>Microwave beep</td> <td>Kitchen</td> <td>Kitchen</td> </tr>
@@ -50,7 +49,7 @@
   
     <script>
 		
-	var lengthOfGapInSec = 1;						//Expected pause for an event to be marked
+	var lengthOfGapInSec = 1;																	//Expected pause for an event to be marked SET FROM SERVER
 	/**** Data from Socket ****/
 	
       var socket = io.connect({'reconnection': true, 'timeout': 5*86400*1000});					//URL is windows.location (url address of the webpage), timeout: 5 days
