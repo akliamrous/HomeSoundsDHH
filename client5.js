@@ -8,7 +8,7 @@ var socket = io.connect(SERVER_ADD, {'reconnection': true, 'timeout': 5*86400*10
 
 socket.on('connect', function () {
     console.log("Client " + id +  ": connected to server!");
-    socket.emit('handshake-data', id[0]);		//ids are arrays here
+    socket.emit('handshake', id[0]);		//ids are arrays here
 });
 
 var spawn = require("child_process").spawn;

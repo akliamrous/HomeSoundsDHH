@@ -2052,3 +2052,351 @@
 {"Time":"2019-2-4 22:29:27","clientid":"http-waveform","level":"info","message":"connected"}
 {"Time":"2019-2-4 22:29:38","clientid":"http-waveform","level":"info","message":"disconnected"}
 {"Time":"2019-2-4 22:29:39","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:31:49","clientid":"dj-home","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:31:48","Location":["dj-home"],"Event":"Med","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:31:56","clientid":"http-soundlist","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:31:56","clientid":"http-floorplan","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:31:56","clientid":"http-waveform","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:31:57","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:31:57","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:31:57","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:32:01","Location":["jon-office"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:32:15","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:33:30","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:33:39","Location":["dj-home"],"Event":"Low","duration":"1.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:33:55","clientid":"jon-office","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:33:58","clientid":"jon-office","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:36:05","clientid":"http-soundlist","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:36:05","clientid":"http-floorplan","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:36:05","clientid":"http-waveform","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:36:06","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:36:06","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:36:06","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:36:35","clientid":"jon-office","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:36:39","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:36:39","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:36:40","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:36:42","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:36:43","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:36:43","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:36:45","clientid":"jon-office","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:36:47","clientid":"jon-office","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:36:49","clientid":"http-soundlist","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:36:49","clientid":"http-floorplan","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:36:49","clientid":"http-waveform","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:36:49","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:36:49","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:36:49","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:37:12","clientid":"http-waveform","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:37:12","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:40:32","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:40:32","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:40:33","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:40:33","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:40:33","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:40:36","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:40:38","clientid":"http-soundlist","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:40:38","clientid":"http-floorplan","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:40:38","clientid":"http-waveform","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:40:39","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:40:39","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:40:39","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:40:45","Location":["dj-home"],"Event":"Med","duration":"0.75s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:40:58","clientid":"http-waveform","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:40:58","clientid":"http-soundlist","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:40:58","clientid":"http-floorplan","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:41:01","clientid":"http","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:41:01","clientid":"http","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:41:01","clientid":"http","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:41:01","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:41:01","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:41:01","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:41:03","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:41:07","Location":["jon-office"],"Event":"Med","duration":"0.5s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:41:07","Location":["dj-home"],"Event":"Loud","duration":"0.75s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:41:11","Location":["jon-office"],"Event":"Low","duration":"1s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:41:10","Location":["dj-home"],"Event":"Loud","duration":"1.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:41:14","Location":["jon-office"],"Event":"Med","duration":"1s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:41:13","Location":["dj-home"],"Event":"Loud","duration":"1.75s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:41:16","Location":["jon-office"],"Event":"Med","duration":"1.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:41:15","Location":["dj-home"],"Event":"Loud","duration":"2.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:41:19","Location":["jon-office"],"Event":"Med","duration":"1.5s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:41:19","Location":["dj-home"],"Event":"Loud","duration":"2s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:41:25","Location":["jon-office"],"Event":"Low","duration":"0.5s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:41:26","Location":["jon-office"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:41:25","Location":["dj-home"],"Event":"Loud","duration":"2.75s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:41:35","Location":["jon-office"],"Event":"Low","duration":"0.75s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:41:33","Location":["dj-home"],"Event":"Loud","duration":"2.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:41:40","Location":["dj-home"],"Event":"Low","duration":"1s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:42:16","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:42:26","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:42:27","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:44:04","Location":["dj-home"],"Event":"Low","duration":"0.5s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:44:30","Location":["dj-home"],"Event":"Med","duration":"0.75s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:44:43","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:45:35","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:46:09","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:46:23","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:46:27","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:47:52","Location":["dj-home"],"Event":"Med","duration":"0.5s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:49:19","Location":["dj-home"],"Event":"Med","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:49:27","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:49:37","Location":["dj-home"],"Event":"Low","duration":"1s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:49:52","Location":["dj-home"],"Event":"Med","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:50:53","Location":["dj-home"],"Event":"Med","duration":"0.5s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:50:53","Location":["jon-office"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:51:02","Location":["dj-home"],"Event":"Low","duration":"0.75s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:51:42","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:52:48","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:52:50","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:52:50","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:52:51","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:52:51","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:52:52","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:52:54","clientid":"http-soundlist","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:52:54","clientid":"http-floorplan","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:52:54","clientid":"http-waveform","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:52:55","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:52:55","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:52:55","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:52:56","Location":["dj-home"],"Event":"Loud","duration":"2.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:52:56","Location":["jon-office"],"Event":"Med","duration":"2.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:53:06","Location":["dj-home"],"Event":"Loud","duration":"0.75s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:53:06","Location":["jon-office"],"Event":"Loud","duration":"0.75s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:53:46","clientid":"http-soundlist","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:53:46","clientid":"http-floorplan","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:53:46","clientid":"http-waveform","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:53:47","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:53:47","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:53:47","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:53:48","Location":["dj-home"],"Event":"Med","duration":"0.5s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:54:04","Location":["dj-home"],"Event":"Low","duration":"2s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:54:30","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:54:33","Location":["dj-home"],"Event":"Low","duration":"3.75s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:54:43","Location":["dj-home"],"Event":"Med","duration":"0.5s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:54:49","Location":["dj-home"],"Event":"Med","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:54:49","Location":["jon-office"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:55:06","Location":["dj-home"],"Event":"Low","duration":"0.5s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:55:56","clientid":"http","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:56:09","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:56:10","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:56:10","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:56:10","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:56:11","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:56:12","Location":["dj-home"],"Event":"Med","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:56:15","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:56:24","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:56:37","Location":["dj-home"],"Event":"Low","duration":"0.5s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:57:51","clientid":"http-soundlist","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:57:51","clientid":"http-floorplan","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:57:51","clientid":"http-waveform","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:57:52","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:57:52","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:57:52","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:58:03","clientid":"http-soundlist","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:58:03","clientid":"http-floorplan","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:58:03","clientid":"http-waveform","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 22:58:04","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:58:04","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:58:04","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-4 22:58:11","Location":["dj-home"],"Event":"Med","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:58:14","Location":["jon-office"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:58:14","Location":["dj-home"],"Event":"Med","duration":"1.5s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:58:17","Location":["dj-home"],"Event":"Med","duration":"0.75s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 22:58:37","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:00:14","Location":["jon-office"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:00:14","Location":["dj-home"],"Event":"Med","duration":"3.5s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:00:20","Location":["jon-office"],"Event":"Low","duration":"0.75s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:00:21","Location":["jon-office"],"Event":"Med","duration":"1.75s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:00:19","Location":["dj-home"],"Event":"Loud","duration":"4.5s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:05:10","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:05:47","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:09:02","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:11:04","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:13:34","Location":["dj-home"],"Event":"Med","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:14:56","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:15:05","Location":["dj-home"],"Event":"Med","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:15:08","Location":["dj-home"],"Event":"Med","duration":"0.5s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:15:11","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:15:27","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:15:31","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:16:01","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:16:17","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:17:00","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:17:05","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:21:22","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:26:27","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:28:13","Location":["dj-home"],"Event":"Med","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:31:10","Location":["dj-home"],"Event":"Low","duration":"0.5s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:31:32","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:32:00","Location":["dj-home"],"Event":"Med","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:32:09","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:32:23","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:32:23","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:32:23","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:32:24","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:32:50","Location":["jon-office"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:32:50","Location":["dj-home"],"Event":"Med","duration":"0.5s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:32:51","Location":["jon-office"],"Event":"Med","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:32:52","Location":["dj-home"],"Event":"Loud","duration":"0.75s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:32:55","Location":["dj-home"],"Event":"Low","duration":"0.5s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:33:36","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:34:15","clientid":"http-soundlist","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:34:15","clientid":"http-floorplan","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:34:15","clientid":"http-waveform","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:34:18","clientid":"http","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:34:18","clientid":"http","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:34:18","clientid":"http","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:34:18","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:34:18","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:34:18","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:34:37","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:34:40","Location":["dj-home"],"Event":"Med","duration":"0.75s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:36:23","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:36:35","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:37:24","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:37:51","clientid":"http-soundlist","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:37:51","clientid":"http-floorplan","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:37:51","clientid":"http-waveform","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:37:52","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:37:52","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:37:52","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:38:01","clientid":"http-soundlist","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:38:01","clientid":"http-floorplan","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:38:01","clientid":"http-waveform","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:38:01","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:38:01","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:38:01","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:38:04","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:38:07","clientid":"http-soundlist","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:38:07","clientid":"http-floorplan","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:38:07","clientid":"http-waveform","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:38:07","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:38:07","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:38:07","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:38:27","clientid":"http-soundlist","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:38:27","clientid":"http-floorplan","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:38:27","clientid":"http-waveform","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:38:27","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:38:27","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:38:27","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:38:49","clientid":"http-soundlist","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:38:49","clientid":"http-floorplan","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:38:49","clientid":"http-waveform","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:38:49","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:38:49","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:38:49","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:38:55","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:39:08","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:39:18","clientid":"http-soundlist","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:39:18","clientid":"http-floorplan","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:39:18","clientid":"http-waveform","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:39:19","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:39:19","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:39:19","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:39:33","clientid":"http-soundlist","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:39:33","clientid":"http-floorplan","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:39:33","clientid":"http-waveform","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:39:34","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:39:34","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:39:34","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:39:37","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:39:42","clientid":"http","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:40:28","clientid":"http-soundlist","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:40:28","clientid":"http-floorplan","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:40:28","clientid":"http-waveform","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:40:28","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:40:28","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:40:28","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:40:31","Location":["dj-home"],"Event":"Med","duration":"0.5s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:40:32","Location":["dj-office"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:40:32","Location":["dj-home"],"Event":"Med","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:41:06","clientid":"http-soundlist","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:41:06","clientid":"http-floorplan","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:41:06","clientid":"http-waveform","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:41:07","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:41:07","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:41:07","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:41:16","Location":["dj-home"],"Event":"Low","duration":"0.75s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:41:18","clientid":"http-soundlist","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:41:18","clientid":"http-floorplan","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:41:18","clientid":"http-waveform","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:41:19","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:41:19","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:41:19","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:41:29","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:41:33","Location":["dj-home"],"Event":"Loud","duration":"0.75s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:41:33","Location":["dj-office"],"Event":"Loud","duration":"1s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:41:37","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:42:00","Location":["dj-home"],"Event":"Low","duration":"0.5s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:43:20","clientid":"http-soundlist","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:43:20","clientid":"http-floorplan","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:43:20","clientid":"http-waveform","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:43:20","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:43:20","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:43:20","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:43:30","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:48:32","Location":["dj-home"],"Event":"Low","duration":"0.5s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:48:37","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:48:52","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:50:18","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:50:22","Location":["dj-office"],"Event":"Low","duration":"1.5s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:50:21","Location":["dj-home"],"Event":"Loud","duration":"2.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:50:45","Location":["dj-home"],"Event":"Med","duration":"1.75s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:50:46","Location":["dj-office"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:50:48","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:50:59","clientid":"http-soundlist","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:50:59","clientid":"http-waveform","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:50:59","clientid":"http-floorplan","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:51:05","Location":["dj-office"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:51:47","clientid":"http-waveform","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:51:47","clientid":"http-floorplan","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:51:47","clientid":"http","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:51:47","clientid":"http-soundlist","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:51:56","clientid":"http-soundlist","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:51:56","clientid":"http-floorplan","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:51:56","clientid":"http-waveform","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:51:57","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:51:57","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:51:57","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:52:46","Location":["dj-office"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:55:22","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:55:23","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:55:23","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:56:57","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:57:02","Location":["dj-home"],"Event":"Loud","duration":"1.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:57:08","Location":["dj-home"],"Event":"Med","duration":"2s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:57:12","Location":["dj-home"],"Event":"Loud","duration":"1s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:57:39","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:57:57","clientid":"http-floorplan","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:57:58","clientid":"http-waveform","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:57:58","clientid":"http-soundlist","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:58:14","clientid":"http","level":"info","message":"disconnected"}
+{"Time":"2019-2-4 23:58:35","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:58:36","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:58:36","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-4 23:58:52","Location":["dj-office"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:58:52","Location":["dj-home"],"Event":"Loud","duration":"1.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:59:04","Location":["dj-home"],"Event":"Med","duration":"1s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:59:06","Location":["dj-home"],"Event":"Med","duration":"0.75s","level":"info","message":"sound event"}
+{"Time":"2019-2-4 23:59:29","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-5 00:00:33","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-5 00:01:03","clientid":"http","level":"info","message":"disconnected"}
+{"Time":"2019-2-5 00:01:03","clientid":"http-soundlist","level":"info","message":"disconnected"}
+{"Time":"2019-2-5 00:01:03","clientid":"http-waveform","level":"info","message":"disconnected"}
+{"Time":"2019-2-5 00:01:03","clientid":"http-floorplan","level":"info","message":"disconnected"}
+{"Time":"2019-2-5 00:01:03","clientid":"http-waveform","level":"info","message":"disconnected"}
+{"Time":"2019-2-5 00:01:03","clientid":"http-soundlist","level":"info","message":"disconnected"}
+{"Time":"2019-2-5 00:01:03","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-5 00:01:03","clientid":"http-floorplan","level":"info","message":"connected"}
+{"Time":"2019-2-5 00:01:03","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-5 00:01:03","clientid":"http-waveform","level":"info","message":"connected"}
+{"Time":"2019-2-5 00:01:03","clientid":"http-soundlist","level":"info","message":"connected"}
+{"Time":"2019-2-5 00:01:10","Location":["dj-home"],"Event":"Low","duration":"0.75s","level":"info","message":"sound event"}
+{"Time":"2019-2-5 00:01:22","clientid":"http","level":"info","message":"disconnected"}
+{"Time":"2019-2-5 00:01:24","Location":["dj-home"],"Event":"Med","duration":"1.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-5 00:01:40","Location":["dj-home"],"Event":"Low","duration":"0.75s","level":"info","message":"sound event"}
+{"Time":"2019-2-5 00:02:13","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-5 00:03:14","Location":["dj-home"],"Event":"Low","duration":"0.5s","level":"info","message":"sound event"}
+{"Time":"2019-2-5 00:03:16","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}
+{"Time":"2019-2-5 00:03:19","Location":["dj-home"],"Event":"Low","duration":"0.25s","level":"info","message":"sound event"}

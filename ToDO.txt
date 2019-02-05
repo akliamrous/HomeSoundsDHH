@@ -6,12 +6,12 @@ ToDo:
 
 16. Logging client interactions.
 
-17. Times should be coordinated by server. Also, just have one variable in server that is sent across all data and soundlist2 client (e.g. lengthOfGapInSec, numberOfSamplesPerSec)
-21. Server should send data client names and number of data clients to web clients  during handshake, and web clients should configure accordingly (eg. waveform should automatically add or remove number of waveforms, floorplan should adjust views and add names) - 1 hour (only after Jon approves design...) 
 
 Maybes: 
 14. Maybe use one socket for all 3 web client for second deployment once you know that all 3 are required...
 15. (Later) For soundlist, figure out a way to display past missed data as well. (Ooooh!)
+17. Times should be coordinated by server. Also, just have one variable in server that is sent across data client (e.g. lengthOfGapInSec, numberOfSamplesPerSec)
+21. Server should send data client names and number of data clients to web clients  during handshake, and web clients should configure accordingly (eg. waveform should automatically add or remove number of waveforms, floorplan should adjust views and add names) [Tried but there's lot more failproofs to it]
 
 Done: 
 1. Floorplan backend: Server recognizes high, med, low, blank. (very basic - heuristic)

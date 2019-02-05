@@ -67,8 +67,7 @@ var server = http.createServer(function (request, response) {
         }
     });
 }).listen(port);
-var clients = {};
-var dataClientNames = [];								
+var clients = {};								
 var httpListener = io.listen(server);
 console.log((new Date()).toLocaleString() + " Server: Ready to roll on port " + port + ".");
 
@@ -77,15 +76,17 @@ httpListener.sockets.on('connection', function(socket){
 	//socket.sendBuffer.length = 0;				//Clear the send buffer to avoid overloading the web client. We don't care about missed data except for Soundlist (ToDO later).
 	clients[socket.id] = socket;				//For keeping track of clients and cleaning up on disconnect
 	//console.log((new Date()).toLocaleString() + " Server: A client connected.");
-    socket.emit('handshake-server',  dataClientNames);
+    
     var clientid = "http";
-    var numOfSamplesPerSec = 4;				//CHANGE BASED ON PYTHON CODE
-    var lengthOfGapInSec = 1;				//Expected pause for an event to be marked
+    const numOfSamplesPerSec = 4;				//CHANGE BASED ON PYTHON CODE
+    const lengthOfGapInSec = 1;					//Expected pause for an event to be marked
     var numOfSamplesReceived = 0;
     var numOfBlankSamples = lengthOfGapInSec*numOfSamplesPerSec + 1;					//Assume a long pause for starting
     var peak = 0.0;
     var event = "Blank";
     var duration = 0.0;	//in seconds
+	
+	socket.emit('handshake-server', JSON.stringify({lengthOfGapInSec: lengthOfGapInSec, numOfSamplesPerSec: numOfSamplesPerSec}));
 	
 	socket.on('responseFromDataClient', function (data) {
 		 data = JSON.parse(data);		//console.log((new Date()).toLocaleString() + " Server: Received from data client %s: %s", data.clientid, data.dataFromDataClient); //Print Data received from client
@@ -130,14 +131,7 @@ httpListener.sockets.on('connection', function(socket){
 		event = "Blank"; duration = 0.0; //Reset events
 	});
 	
-	socket.on('handshake-data', function(id){
-		console.log((new Date()).toLocaleString() + " Server: Client " + id + " connected."); 
-		logger.info('connected', {Time: (new Date()).toLocaleString(), clientid: id});
-		clientid = id;
-		dataClientNames.push(id);
-	});
-	
-	socket.on('handshake-web', function(id){
+	socket.on('handshake', function(id){
 		console.log((new Date()).toLocaleString() + " Server: Client " + id + " connected."); 
 		logger.info('connected', {Time: (new Date()).toLocaleString(), clientid: id});
 		clientid = id;

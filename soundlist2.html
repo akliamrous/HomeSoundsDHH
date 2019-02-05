@@ -49,7 +49,7 @@
   
     <script>
 		
-	var lengthOfGapInSec = 1;																	//Expected pause for an event to be marked SET FROM SERVER
+	var lengthOfGapInSec = 1;																	//Expected pause for an event to be marked set from server during handshake
 	/**** Data from Socket ****/
 	
       var socket = io.connect({'reconnection': true, 'timeout': 5*86400*1000});					//URL is windows.location (url address of the webpage), timeout: 5 days
@@ -58,7 +58,12 @@
 	  socket.on('connect', function () {
 		//socket.receiveBuffer = [];			//Clear buffer
 		console.log("Soundlist connected to server!");
-		socket.emit('handshake-web', "http-soundlist");
+		socket.emit('handshake', "http-soundlist");
+	  });
+	  
+	  socket.on('handshake-server', function (data) {
+		data = JSON.parse(data);
+		lengthOfGapInSec = data.lengthOfGapInSec;
 	  });
       
       socket.on('responseFromHttpServer', function(data){

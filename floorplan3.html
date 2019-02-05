@@ -7,7 +7,7 @@
 	<style>
 	  html, body {
 		  font: 18px Helvetica, Arial;
-		  height: 99.7%;											/* Weird offset */	
+		  height: 99.5%;											/* Weird offset */	
 		  margin: 0;
 		  padding: 0;
 		}
@@ -105,7 +105,7 @@
 	</div> -->
    
   <script>
-	var FIRST_ROOM = "dj-home", SECOND_ROOM = "jon-office", THIRD_ROOM = "dj-office";
+	  var FIRST_ROOM = "dj-home", SECOND_ROOM = "dj-office", THIRD_ROOM = "jon-office";
 	
 	/**** Data from Socket ****/
       var socket = io.connect({'reconnection': true, 'timeout': 5*86400*1000});					//URL is windows.location (url address of the webpage), timeout: 5 days
@@ -114,7 +114,7 @@
 	  socket.on('connect', function () {
 		//socket.receiveBuffer = [];			//Clear buffer
 		console.log("Floorplan connected to server!");
-		socket.emit('handshake-web', "http-floorplan");
+		socket.emit('handshake', "http-floorplan");
 	  });      
       
       socket.on('responseFromHttpServer', function(data){

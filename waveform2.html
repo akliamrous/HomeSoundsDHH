@@ -42,10 +42,11 @@
 		  width:        600px;												/* Change width to incorporate more elements, but reduce points */
 		  display:  	inline-block;
 		}
-		.waveform h2 {
+		h2 {
 		  margin-left:  40px;
 		  font-size:    22px;
 		  color: 		#666;
+		  display: 		inline;
 		}
 		.waveform > div div.bar {
 		  background-color:  red;
@@ -76,11 +77,11 @@
     </style> 
   </head>
   <body>
+	<h2 style="margin-right: 500px">DJ's Home</h2><h2>DJ's Office</h2>    
     <div class="page">
       <div class="waveform">
-		<h2>DJ's Home</h2>
         <div class="svg1"></div>									
-        <div class="svg2"></div>								<!-- Uncomment this -->
+        <div class="svg2"></div>								
       </div>
     </div>
 
@@ -90,7 +91,7 @@
 	 * Another trick (not recommended) is to increase the data updatae time while also increasing the points (coz generating 512 point time is not double of 256 point time)
 	 * This way the eye wouldn't see big lines moving too fast....
 	 */
-		var dataClientNames = [];
+		var FIRST_ROOM = "dj-home", SECOND_ROOM = "dj-office", THIRD_ROOM = "jon-office";
 		
 		var wave_json1 = Array.from({length: 256}, () => 0.0);						// Number of points  = 256. Orig = 1024 (which increases granurality but decreases performance and also decreases speed of updatae of waveform)
 		var wave_json2 = Array.from({length: 256}, () => 0.0);
@@ -106,19 +107,13 @@
 			//socket.receiveBuffer.length = 0;			//Clear buffer
 			//socket.sendBuffer.length = 0;
 			console.log("Waveform connected to server!");
-			socket.emit('handshake-web', "http-waveform");
-		  });
-		  
-		  socket.on('handshake-server', function (data) {
-			dataClientNames = data;
-			console.log(data);
+			socket.emit('handshake', "http-waveform");
 		  });
 		  
 		  socket.on('responseFromHttpServer', function(data){	
 			  data = JSON.parse(data);
-			  if(dataClientNames.length > 0 && data.clientid == dataClientNames[0])		//Data clients are stored in an array
+			  if(data.clientid == FIRST_ROOM)
 			  {
-				console.log("here");  
 				y1 = parseFloat(data.dataFromHttpServer);
 				wave_json1.shift();
 				wave_json1.push(y1);
@@ -131,7 +126,7 @@
 				svg_render(wave_json1, ".waveform > .svg1", max_val);		// Note that max_val is updataed in the next cycle
 			  }
 			  
-			  if(dataClientNames.length > 1 && data.clientid == dataClientNames[1])
+			  if(data.clientid == SECOND_ROOM)
 			  {
 				y2 = parseFloat(data.dataFromHttpServer);
 				wave_json2.shift();
