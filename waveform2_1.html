@@ -36,17 +36,17 @@
 		.waveform > div {
 		  border:       2px solid #ddd;
 		  height:       140px;
-		  margin-left:  40px;
+		  margin-left:  20px;
 		  padding:      2px;
 		  position:     relative;
 		  width:        600px;												/* Change width to incorporate more elements, but reduce points */
 		  display:  	inline-block;
 		}
 		h2 {
-		  margin-left:  40px;
+		  margin-left:  3px;
 		  font-size:    22px;
-		  color: 		#666;
-		  display: 		inline;
+		  color: 		#999;
+		  position: 	absolute;
 		}
 		.waveform > div div.bar {
 		  background-color:  red;
@@ -60,28 +60,13 @@
 		  fill:     green;
 		  //opacity:  0.5;
 		}
-		.axis {
-		  position: absolute;
-		  position: absolute;
-		  top:      4px;
-		  left:    -40px;
-		}
-		.axis g path.domain {
-		  display: none;
-		}
-		.axis g text {
-		  font-family: 'Roboto', sans-serif;
-		  opacity:      0.5;											//Opacity reduces performance
-		  font-size:    10px;
-		}
     </style> 
   </head>
-  <body>
-	<h2 style="margin-right: 500px">DJ's Home</h2><h2>DJ's Office</h2>    
+  <body> 
     <div class="page">
       <div class="waveform">
-        <div class="svg1"></div>									
-        <div class="svg2"></div>								
+        <div class="svg1"><h2>DJ's Home</h2></div>									
+        <div class="svg2"><h2>DJ's Office</h2></div>								
       </div>
     </div>
 
@@ -93,11 +78,18 @@
 	 */
 		var FIRST_ROOM = "dj-home", SECOND_ROOM = "dj-office", THIRD_ROOM = "jon-office";
 		
-		var wave_json1 = Array.from({length: 256}, () => 0.0);						// Number of points  = 256. Orig = 1024 (which increases granurality but decreases performance and also decreases speed of updatae of waveform)
-		var wave_json2 = Array.from({length: 256}, () => 0.0);
-		var width = 600, height = 140; 		
+		var numOfPoints = 256;				// Number of points  = 256. Orig = 1024 (which increases granurality but decreases performance and also decreases speed of updatae of waveform)
+		var wave_json1 = Array.from({length: numOfPoints}, () => 0.1);						
+		var wave_json2 = Array.from({length: numOfPoints}, () => 0.1);
 		var min_max_val = 1.5;							// IMP: CHANGE BASED ON MIC VOLUME AND HOW IT LOOKS. Remeber that graph doesn't show all value.
 		var max_val = min_max_val;
+		
+		//D3 specific elements
+		var width = 600, height = 140; 
+		var bar_width = width / (numOfPoints*2);							// Dividing by 2 reduces the number of path points. This allows to reduce the array length above while keeping same granularity (width of bars) by introducing space between the bars
+	
+		svg_creater(wave_json1, '.svg1', min_max_val);
+		svg_creater(wave_json2, '.svg2', min_max_val);
 		
 		/**** data from Socket ****/
 		  var socket = io.connect();					//URL is windows.location (url address of the webpage), timeout: 5 days
@@ -122,8 +114,7 @@
 				max_val = d3.max(wave_json1.concat(wave_json2), function(d) { return d; });	//Concat arrays based on number of waveforms
 				if (max_val < min_max_val) max_val = min_max_val;				 				// If volume is too low, don't want the scale to show high //
 				
-				d3.selectAll(".svg1 svg").remove();
-				svg_render(wave_json1, ".waveform > .svg1", max_val);		// Note that max_val is updataed in the next cycle
+				svg_updater(wave_json1, ".svg1", max_val);		// Note that max_val is updataed in the next cycle
 			  }
 			  
 			  if(data.clientid == SECOND_ROOM)
@@ -136,42 +127,26 @@
 				max_val = d3.max(wave_json1.concat(wave_json2), function(d) { return d; });	//Concat arrays based on number of waveforms
 				if (max_val < min_max_val) max_val = min_max_val;				 				// If volume is too low, don't want the scale to show high //
 				
-				d3.selectAll(".svg2 svg").remove();
-				svg_render(wave_json2, ".waveform > .svg2", max_val);
-			  }
-			  
-			  if(data.clientid == SECOND_ROOM)
-			  {
-				y2 = parseFloat(data.dataFromHttpServer);
-				wave_json2.shift();
-				wave_json2.push(y2);
-				
-				/* To handle that all waveforms have same y scales */
-				max_val = d3.max(wave_json1.concat(wave_json2), function(d) { return d; });	//Concat arrays based on number of waveforms
-				if (max_val < min_max_val) max_val = min_max_val;				 				// If volume is too low, don't want the scale to show high //
-				
-				d3.selectAll(".svg2 svg").remove();
-				svg_render(wave_json2, ".waveform > .svg3", max_val);
+				svg_updater(wave_json2, ".svg2", max_val);
 			  }
 		  });
 
 		/**** Waveform *****/
-		function svg_render(data, svg, max_val) {
+		function svg_creater(data, svg, max_val) {
+		  
 		  var node = d3.select(svg).append("svg")
 			.attr("class","chart")
 			.attr("width", width)
 			.attr("height", height);
-
-		  var y = d3.scale.linear().range([height, -height]);
+			
+		  var y = d3.scale.linear().range([height, -height]);  
 		  y.domain([-max_val, max_val]);
-		  var x = d3.scale.linear().domain([0, data.length]);
-		  var bar_width = width / (data.length*2);							// Dividing by 2 reduces the number of path points. This allows to reduce the array length above while keeping same granularity (width of bars) by introducing space between the bars
-
+		  
 		  var bar = node.selectAll("g")
 			.data(data)
 			.enter().append("g") // svg "group"
 			.attr("transform", function(d, i) {
-			  return "translate(" + i * bar_width * 2 + ",0)";				// Multiplying by 2 reduces the number of path points by adding space between points
+			  return "translate(" + i * bar_width*2 + ",0)";				// Multiplying by 2 reduces the number of path points by adding space between points
 			});
 
 		  bar.append("rect")
@@ -182,25 +157,24 @@
 			.attr("height", function(d) {
 			  return Math.abs(y(d)); })
 			.attr("width", bar_width );
-
-		  /* Removed axis to improve performance */
-		  
-		  var axis = d3.svg.axis()
-			.scale(y)
-			.ticks(12)
-			.orient("left");
-
-		  d3.select(svg).append("svg")
-			.attr("class", "axis")
-			.attr("width", 60)
-			.attr("height", height)
-			.append("g")
-			.attr("transform", "translate(40," + (height/2) + ")" )
-			.call(axis);
 		}
+		
+		function svg_updater(data, svg, max_val) {
+		  
+		  var node = d3.select(svg).select("svg");
+		  
+		  var y = d3.scale.linear().range([height, -height]);  
+		  y.domain([-max_val, max_val]);
+		  		  
+		  var bar = node.selectAll("g").data(data);
 
-		function d( s ) {
-		  console.log( "log: " + s );
+		  bar.select("rect")
+			.attr("y", function(d) {
+			  var yv = height - Math.abs(y(d)/2) - height/2 + 2;
+			  return yv;
+			})
+			.attr("height", function(d) {
+			  return Math.abs(y(d)); });
 		}
 		
 	  /** Error Handling. See: https://socket.io/docs/client-api/ **/

@@ -67,7 +67,9 @@ var server = http.createServer(function (request, response) {
         }
     });
 }).listen(port);
-var clients = {};								
+var clients = {};					
+var listArray20 = new Array(20);
+var listArraylen = 20;	
 var httpListener = io.listen(server);
 console.log((new Date()).toLocaleString() + " Server: Ready to roll on port " + port + ".");
 
@@ -78,7 +80,7 @@ httpListener.sockets.on('connection', function(socket){
 	//console.log((new Date()).toLocaleString() + " Server: A client connected.");
     
     var clientid = "http";
-    const numOfSamplesPerSec = 4;				//CHANGE BASED ON PYTHON CODE
+    const numOfSamplesPerSec = 20;				//CHANGE BASED ON PYTHON CODE
     const lengthOfGapInSec = 1;					//Expected pause for an event to be marked
     var numOfSamplesReceived = 0;
     var numOfBlankSamples = lengthOfGapInSec*numOfSamplesPerSec + 1;					//Assume a long pause for starting
@@ -86,7 +88,8 @@ httpListener.sockets.on('connection', function(socket){
     var event = "Blank";
     var duration = 0.0;	//in seconds
 	
-	socket.emit('handshake-server', JSON.stringify({lengthOfGapInSec: lengthOfGapInSec, numOfSamplesPerSec: numOfSamplesPerSec}));
+	socket.emit('handshake-server-list', JSON.stringify({lengthOfGapInSec: lengthOfGapInSec, numOfSamplesPerSec: numOfSamplesPerSec, listArray: listArray20, listArraylen: listArraylen}));
+	socket.emit('handshake-server-wave', JSON.stringify({}));
 	
 	socket.on('responseFromDataClient', function (data) {
 		 data = JSON.parse(data);		//console.log((new Date()).toLocaleString() + " Server: Received from data client %s: %s", data.clientid, data.dataFromDataClient); //Print Data received from client
@@ -113,6 +116,17 @@ httpListener.sockets.on('connection', function(socket){
 						var date = new Date();
 						date.setSeconds(date.getSeconds() - duration - lengthOfGapInSec);
 						logger.info('sound event', {Time: date.toLocaleString(), Location: data.clientid, Event: event, duration: duration + "s"});
+						
+						/* Pushing to a sound list array */
+						var hours = date.getHours(), 
+							minutes = date.getMinutes(), 
+							seconds = date.getSeconds();
+						if (minutes < 10) {minutes = "0" + minutes;}
+						if (seconds < 10) {seconds = "0" + seconds;}
+						
+						listArray20.shift();
+						listArray20.push([hours + ':' + minutes + ':' + seconds, event, data.clientid, duration]);
+						if(listArraylen > 0) listArraylen--;
 					}
 					//Reset peak
 					peak = 0.0;
@@ -127,6 +141,7 @@ httpListener.sockets.on('connection', function(socket){
 		 }
 		 
 		/*** Emit message...***/
+
 		socket.broadcast.emit('responseFromHttpServer', JSON.stringify({dataFromHttpServer: data.dataFromDataClient, absLoudLevel: absSoundLevel, event: event, duration: duration, clientid: data.clientid})); // socket.broadcast.emit(...); // Sending to all clients except sender	// socket.emit(...); // Sends to the sender.	// httpListener.sockets.emit(...); // sends to all connected clients.
 		event = "Blank"; duration = 0.0; //Reset events
 	});

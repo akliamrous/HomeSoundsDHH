@@ -123,10 +123,10 @@
 		  //console.log("Floorplan Data:" + parseFloat(data.dataFromHttpServer) + " Room:" +  data.clientid + " Level:" + data.absLoudLevel);  
 
 		  if(data.clientid == FIRST_ROOM)
-			pulseChanger('pulse-button-first-room', data.absLoudLevel);
+			pulseChanger2('pulse-button-first-room', data.absLoudLevel, data.dataFromHttpServer);
 		  
 		  else if(data.clientid == SECOND_ROOM)
-			  pulseChanger('pulse-button-second-room', data.absLoudLevel);
+			  pulseChanger2('pulse-button-second-room', data.absLoudLevel, data.dataFromHttpServer);
 	  });
 	  
 	  function pulseChanger(clas, loudLevel){
@@ -163,6 +163,27 @@
 			{
 				$('.' + clas).css('visibility', 'hidden');
 			}
+	  }
+	  
+	   function pulseChanger2(clas, loudLevel, value){
+		  
+		//$('.' + clas + ' > p').text(loudLevel);  
+		$('.' + clas).css('visibility', 'visible');
+		
+		if (loudLevel != "Blank")
+			{
+				var radius = value*10;
+				$('.' + clas).css('background', 'rgba(90, 153, 212, 0.9)');
+				$('.' + clas).css('box-shadow', '0 0 0 0 rgba(90, 153, 212, 0.5)');
+				$('.' + clas).css('height', radius); $('.' + clas).css('width', radius);
+				$('.' + clas).css('margin-top', -1*radius/2); $('.' + clas).css('margin-left', -1*radius/2);	
+				$('.' + clas + ' > p').css('top', '33px'); $('.' + clas + ' > p').css('font-size', '20px');
+				
+			}
+		else
+		{
+			$('.' + clas).css('visibility', 'hidden');
+		}
 	  }
 	  
 	  /** Error Handling. See: https://socket.io/docs/client-api/ **/

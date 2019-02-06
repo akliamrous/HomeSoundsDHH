@@ -44,7 +44,8 @@
 	  <tr> <td>10:07:45</td> <td>Microwave beep</td> <td>Kitchen</td> <td>Kitchen</td> </tr>
       <tr> <td>10:08:01</td> <td>Bird chirp</td> <td>Outside</td> <td>Kitchen</td></tr>
 	  <tr> <td>10:08:38</td> <td>Clap</td> <td>Dining</td> <td>Kitchen</td></tr>
-      <tr> <td>16:05:41</td> <td>Liquid pour</td> <td>Dining</td> <td>Kitchen</td> </tr> -->	
+      <tr> <td>16:05:41</td> <td>Liquid pour</td> <td>Dining</td> <td>Kitchen</td> </tr> 
+      -->	
 	</table>
   
     <script>
@@ -61,9 +62,13 @@
 		socket.emit('handshake', "http-soundlist");
 	  });
 	  
-	  socket.on('handshake-server', function (data) {
+	  socket.on('handshake-server-list', function (data) {
 		data = JSON.parse(data);
 		lengthOfGapInSec = data.lengthOfGapInSec;
+		
+		for(i = data.listArraylen; i < 20; i++)
+			$('#myTable tr:last').after('<tr><td>' + data.listArray[i][0] +  '</td> <td>' + data.listArray[i][1] + '</td> <td>' + data.listArray[i][2] + '</td> <td>'  + data.listArray[i][3] + 's</td> </tr>');
+		window.scrollTo(0, document.body.scrollHeight);	
 	  });
       
       socket.on('responseFromHttpServer', function(data){
