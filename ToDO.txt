@@ -2,11 +2,13 @@ ToDo:
 
 11a. Put some basic furniture in floorplan
 
-16. Logging client interactions.
+27. Add waveform in sound list, variable len
+30. Tag the event in the waveform (but umm, say loud?)
 
 Low priority:
 23. Send the waveform initial data on handshake...
 7.a Read Jon's slides.
+16. Logging client interactions.
 17. Times should be coordinated by server. Also, just have one variable in server that is sent across data client (e.g. lengthOfGapInSec, numberOfSamplesPerSec)
 
 Maybes: 
@@ -14,6 +16,8 @@ Maybes:
 
 21. Server should send data client names and number of data clients to web clients  during handshake, and web clients should configure accordingly (eg. waveform should automatically add or remove number of waveforms, floorplan should adjust views and add names) [Tried but there's lot more failproofs needed for this]. 
 24. Basically sever should store state and client just visualizes that state.
+31. Maybe in floorplan, 50ms is too fast, reduce to 500ms, and then update... (if it looks jerky with 28).
+32. Send separate emit to different sockets (floorplan, waveform etc.) based on timing, data requirements etc. etc.
 
 Done: 
 1. Floorplan backend: Server recognizes high, med, low, blank. (very basic - heuristic)
@@ -33,9 +37,14 @@ Done:
 19. Seting low, high med values.
 20. Waveform update error fix.
 22. Move graph titles to inside the graph
+25. Y axis fixed
+26. Remove white space
+28. Add circles in floorplan for past history 
+29. Animation interpolation in floor-plan
+31. Show past 30 seconds in the waveform. 
 
 
-REMEMBER: IF YOU CHANGE 	UPDATE TIME, YOU HAVE TO CHANCE SERVER AND WAVEFORM. AND "RESTART EVERYTHING"
+REMEMBER: IF YOU CHANGE UPDATE TIME, YOU HAVE TO CHANCE SERVER AND WAVEFORM. AND "RESTART EVERYTHING"
 
 ALSO REMEMBER: FOR TABLETS, ALLOW CHROME TO TAKE MORE CPU.
 

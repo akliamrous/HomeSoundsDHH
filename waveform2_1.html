@@ -5,6 +5,7 @@
     <meta name="description" content="">
     <meta name="author" content="jm3">
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <title>d3 audio waveforms</title>
     
@@ -50,23 +51,38 @@
 		}
 		.waveform > div div.bar {
 		  background-color:  red;
-		  position:          absolute;
+		  position:  absolute;
 		}
 		.waveform .svg1 g rect {
 		  fill:     red;
-		  //opacity:  0.5;
+		  opacity:  0.5;
 		}
 		.waveform .svg2 g rect {
 		  fill:     green;
-		  //opacity:  0.5;
+		  opacity:  0.5;
 		}
+		.marquee{
+		  position: absolute;
+		  display: inline-block;
+		  top: calc(100% - 14px);
+		  padding-left: 100%;
+		  animation: marquee 28.4s linear; 
+		  font-size: 12px;
+		  color: #666;
+		  white-space: nowrap;
+		}
+		
+		@keyframes marquee {
+		  100% { transform: translateX(-100%); }
+		}
+		
     </style> 
   </head>
   <body> 
     <div class="page">
       <div class="waveform">
         <div class="svg1"><h2>DJ's Home</h2></div>									
-        <div class="svg2"><h2>DJ's Office</h2></div>								
+        <div class="svg2"><h2>DJ's Office</h2><span class="marquee">Loud, 2.5s</span></div>								
       </div>
     </div>
 
@@ -78,16 +94,18 @@
 	 */
 		var FIRST_ROOM = "dj-home", SECOND_ROOM = "dj-office", THIRD_ROOM = "jon-office";
 		
-		var numOfPoints = 256;				// Number of points  = 256. Orig = 1024 (which increases granurality but decreases performance and also decreases speed of updatae of waveform)
+		var numOfPoints = 512;				// Number of points  = 256. Orig = 1024 (which increases granurality but decreases performance and also decreases speed of updatae of waveform)
 		var wave_json1 = Array.from({length: numOfPoints}, () => 0.1);						
 		var wave_json2 = Array.from({length: numOfPoints}, () => 0.1);
-		var min_max_val = 1.5;							// IMP: CHANGE BASED ON MIC VOLUME AND HOW IT LOOKS. Remeber that graph doesn't show all value.
+		var min_max_val = 6;	//7.5			// IMP: CHANGE BASED ON MIC VOLUME AND HOW IT LOOKS. Remeber that graph doesn't show all value.
 		var max_val = min_max_val;
+		
 		
 		//D3 specific elements
 		var width = 600, height = 140; 
-		var bar_width = width / (numOfPoints*2);							// Dividing by 2 reduces the number of path points. This allows to reduce the array length above while keeping same granularity (width of bars) by introducing space between the bars
-	
+		var bar_width = width / (numOfPoints);							// Dividing by 2 reduces the number of path points. This allows to reduce the array length above while keeping same granularity (width of bars) by introducing space between the bars	
+		
+		
 		svg_creater(wave_json1, '.svg1', min_max_val);
 		svg_creater(wave_json2, '.svg2', min_max_val);
 		
@@ -109,12 +127,7 @@
 				y1 = parseFloat(data.dataFromHttpServer);
 				wave_json1.shift();
 				wave_json1.push(y1);
-				
-				/* To handle that all waveforms have same y scales */
-				max_val = d3.max(wave_json1.concat(wave_json2), function(d) { return d; });	//Concat arrays based on number of waveforms
-				if (max_val < min_max_val) max_val = min_max_val;				 				// If volume is too low, don't want the scale to show high //
-				
-				svg_updater(wave_json1, ".svg1", max_val);		// Note that max_val is updataed in the next cycle
+				svg_updater(wave_json1, ".svg1", min_max_val);		// Note that max_val is updataed in the next cycle
 			  }
 			  
 			  if(data.clientid == SECOND_ROOM)
@@ -122,13 +135,12 @@
 				y2 = parseFloat(data.dataFromHttpServer);
 				wave_json2.shift();
 				wave_json2.push(y2);
-				
-				/* To handle that all waveforms have same y scales */
-				max_val = d3.max(wave_json1.concat(wave_json2), function(d) { return d; });	//Concat arrays based on number of waveforms
-				if (max_val < min_max_val) max_val = min_max_val;				 				// If volume is too low, don't want the scale to show high //
-				
-				svg_updater(wave_json2, ".svg2", max_val);
+				svg_updater(wave_json2, ".svg2", min_max_val);
 			  }
+			  
+			  /* To handle that all waveforms have same y scales for changing y axis */
+			  //max_val = d3.max(wave_json1.concat(wave_json2), function(d) { return d; });	//Concat arrays based on number of waveforms
+			  //if (max_val < min_max_val) max_val = min_max_val;
 		  });
 
 		/**** Waveform *****/
@@ -146,7 +158,7 @@
 			.data(data)
 			.enter().append("g") // svg "group"
 			.attr("transform", function(d, i) {
-			  return "translate(" + i * bar_width*2 + ",0)";				// Multiplying by 2 reduces the number of path points by adding space between points
+			  return "translate(" + i * bar_width + ",0)";				// Multiplying by 2 reduces the number of path points by adding space between points
 			});
 
 		  bar.append("rect")

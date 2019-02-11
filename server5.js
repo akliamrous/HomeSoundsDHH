@@ -67,7 +67,9 @@ var server = http.createServer(function (request, response) {
         }
     });
 }).listen(port);
-var clients = {};					
+var clients = {};	
+
+/* Sound list variable across all data clients */				
 var listArray20 = new Array(20);
 var listArraylen = 20;	
 var httpListener = io.listen(server);
@@ -80,6 +82,8 @@ httpListener.sockets.on('connection', function(socket){
 	//console.log((new Date()).toLocaleString() + " Server: A client connected.");
     
     var clientid = "http";
+    
+    /* Sound list varibles for each data client*/
     const numOfSamplesPerSec = 20;				//CHANGE BASED ON PYTHON CODE
     const lengthOfGapInSec = 1;					//Expected pause for an event to be marked
     var numOfSamplesReceived = 0;
@@ -87,6 +91,11 @@ httpListener.sockets.on('connection', function(socket){
     var peak = 0.0;
     var event = "Blank";
     var duration = 0.0;	//in seconds
+    
+    /* Floorplan variables for each data client */
+    var array24hr = new Array(numOfSamplesPerSec*86400);
+    var array24hrlen = 0;
+    var avg10min = 0, avg24hr = 0;
 	
 	socket.emit('handshake-server-list', JSON.stringify({lengthOfGapInSec: lengthOfGapInSec, numOfSamplesPerSec: numOfSamplesPerSec, listArray: listArray20, listArraylen: listArraylen}));
 	socket.emit('handshake-server-wave', JSON.stringify({}));
@@ -94,7 +103,16 @@ httpListener.sockets.on('connection', function(socket){
 	socket.on('responseFromDataClient', function (data) {
 		 data = JSON.parse(data);		//console.log((new Date()).toLocaleString() + " Server: Received from data client %s: %s", data.clientid, data.dataFromDataClient); //Print Data received from client
 		
-		/*** Do some processing and logging here...***/
+		 /*** Floorplan history processing ***/
+		array24hr.shift();
+		array24hr.push(parseFloat(data.dataFromDataClient));
+		if(array24hrlen < numOfSamplesPerSec*86400) array24hrlen++;
+		avg24hr = (array24hr.slice(-array24hrlen)).reduce((a, b) => a + b, 0)/array24hrlen;
+		
+		if (array24hrlen < numOfSamplesPerSec*600) avg10min = avg24hr;	//Number of seconds in 6hr = 21600, 10min = 600
+		else avg10min = (array24hr.slice(-numOfSamplesPerSec*600)).reduce((a, b) => a + b, 0)/(numOfSamplesPerSec*600);
+			
+		 /*** Sound list event processing ***/
 		 var absSoundLevel = absSoundLevelCalc(parseFloat(data.dataFromDataClient)); 
 		 //Start measuring until 1 second blank is detected
 		 numOfSamplesReceived++;
@@ -125,7 +143,7 @@ httpListener.sockets.on('connection', function(socket){
 						if (seconds < 10) {seconds = "0" + seconds;}
 						
 						listArray20.shift();
-						listArray20.push([hours + ':' + minutes + ':' + seconds, event, data.clientid, duration]);
+						listArray20.push([hours + ':' + minutes + ':' + seconds, event, data.clientid, duration]);		// adds to the end of the array
 						if(listArraylen > 0) listArraylen--;
 					}
 					//Reset peak
@@ -141,8 +159,8 @@ httpListener.sockets.on('connection', function(socket){
 		 }
 		 
 		/*** Emit message...***/
-
-		socket.broadcast.emit('responseFromHttpServer', JSON.stringify({dataFromHttpServer: data.dataFromDataClient, absLoudLevel: absSoundLevel, event: event, duration: duration, clientid: data.clientid})); // socket.broadcast.emit(...); // Sending to all clients except sender	// socket.emit(...); // Sends to the sender.	// httpListener.sockets.emit(...); // sends to all connected clients.
+		socket.broadcast.emit('responseFromHttpServer', JSON.stringify({dataFromHttpServer: data.dataFromDataClient, absLoudLevel: absSoundLevel, event: event, duration: duration, clientid: data.clientid, avgSmall: avg10min, avgLarge: avg24hr})); 
+		// socket.broadcast.emit(...); // Sending to all clients except sender	// socket.emit(...); // Sends to the sender.	// httpListener.sockets.emit(...); // sends to all connected clients.
 		event = "Blank"; duration = 0.0; //Reset events
 	});
 	

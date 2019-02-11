@@ -29,17 +29,26 @@
 		.pulse-button {
 		  position: absolute;
 		  display: block;
-		  width: 40px;											/* 20px for Low, 40px for Med, 60px for Loud*/
-		  height: 40px;
-		  margin-top: -20px;									/* 10px for Low, 20px for Med, 30px for Loud*/
-		  margin-left: -20px;	
+		  width: 40;											/* 20 for Low, 40 for Med, 60 for Loud*/
+		  height: 40;
+		  margin-top: -20;									/* 10 for Low, 20 for Med, 30 for Loud*/
+		  margin-left: -20;	
 		  border: none;
 		  border-radius: 50%;
 		  background: rgba(90, 153, 212, 1.0);
 		  box-shadow: 0 0 0 0 rgba(90, 153, 212, 0.6);
 		  opacity: 0;
+		  
 		  -webkit-animation: pulse 0.4s infinite;				/* This overrides any  transform though */
+		  -moz-animation: pulse 0.4s infinite;				
+		  -ms-animation: pulse 0.4s infinite;				
+		  animation: pulse 0.4s infinite;			
+		  
 		  -webkit-transition: margin-top 0.1s, margin-left 0.1s, width 0.1s, height 0.1s, opacity 0.1s;
+		  -moz-transition: margin-top 0.1s, margin-left 0.1s, width 0.1s, height 0.1s, opacity 0.1s;
+		  -ms-transition: margin-top 0.1s, margin-left 0.1s, width 0.1s, height 0.1s, opacity 0.1s;
+		  transition: margin-top 0.1s, margin-left 0.1s, width 0.1s, height 0.1s, opacity 0.1s;
+		  
 		  z-index: -1;
 		}
 		.pulse-button p {
@@ -47,10 +56,9 @@
 			display: block;
 			top: 25px;											/* 15px for Low, 25px for Med, 33px for Loud*/
 			text-align: center;
-		    font-size: 18px;									/* 16px for Low, 18px for Med, 20px for Loud*/
-		    font-weight: light;
+		    font-size: 18px;									/* 16px for Low, 18px for Med, 20 for Loud*/
 		    line-height: 15.5px;
-		    letter-spacing: 0px;
+		    letter-spacing: 0;
 			color: white;
 		}	
 		@-webkit-keyframes pulse {
@@ -78,10 +86,10 @@
 		.circleLarge {
 		  position: absolute; 
 		  display: block;
-		  width: 80px;
-		  height: 80px;
-		  margin-top: -42px;			/*-border*2*/
-		  margin-left: -42px;			/*-border*2*/
+		  width: 0;
+		  height: 0;
+		  margin-top: 0;			/*-border*2*/
+		  margin-left: 0;			/*-border*2*/
 		  opacity: 0.3;
 		  background: none;
 		  border: dashed 2px grey;
@@ -91,10 +99,10 @@
 		.circleSmall {
 		  position: absolute; 
 		  display: block;
-		  width: 70px;
-		  height: 70px;
-		  margin-top: -37px;			/*-border*2*/
-		  margin-left: -37px;			/*-border*2*/
+		  width: 0;
+		  height: 0;
+		  margin-top: 0;			/*-border*2*/
+		  margin-left: 0;			/*-border*2*/
 		  opacity: 0.7;
 		  background: none;
 		  border: dashed 2px grey;
@@ -156,12 +164,12 @@
 		  if(data.clientid == FIRST_ROOM)
 		  {
 			circleChanger('.first-room', parseFloat(data.avgSmall), parseFloat(data.avgLarge));
-			pulseChanger2('.pulse-button.first-room', parseFloat(data.dataFromHttpServer));
+			pulseChanger2('.pulse-button.first-room', parseFloat(data.dataFromHttpServer), data.absLoudLevel);
 		  }
 		  else if(data.clientid == SECOND_ROOM)
 		  {
 			circleChanger('.second-room', parseFloat(data.avgSmall), parseFloat(data.avgLarge));
-			pulseChanger2('.pulse-button.second-room', parseFloat(data.dataFromHttpServer));
+			pulseChanger2('.pulse-button.second-room', parseFloat(data.dataFromHttpServer), data.absLoudLevel);
 		  }
 	  });
 	  
@@ -172,49 +180,14 @@
 									 'margin-top': -circleVis(avgLarge)/2 - 4, 'margin-left': -circleVis(avgLarge)/2 - 4});
 	  }
 	  
-	  function pulseChanger2(clas, currentVal){  
-		$(clas).css('opacity', '1');
+	  function pulseChanger2(clas, currentVal, loudLevel){
+		if(loudLevel == "Blank")
+			$(clas).css('opacity', '0');
+		else
+			$(clas).css('opacity', '1');
+			
 		$(clas).css( {'height': circleVis(currentVal), 'width': circleVis(currentVal),
 									 'margin-top': -circleVis(currentVal)/2 - 2, 'margin-left': -circleVis(currentVal)/2 - 2});
-	  }
-	  
-	  
-	  function pulseChanger(clas, loudLevel){
-		  
-		//$(clas + ' > p').text(loudLevel);  
-		$(clas).css('opacity', '1');
-		if (loudLevel == "Loud")
-			{
-				//$(clas).css('background', 'rgba(90, 153, 212, 0.9)');
-				//$(clas).css('box-shadow', '0 0 0 0 rgba(90, 153, 212, 0.5)');
-				$(clas).css('height', '60px'); $(clas).css('width', '60px');
-				$(clas).css('margin-top', '-30px'); $(clas).css('margin-left', '-30px');
-				//$(clas).css('opacity', '1');	
-				//$(clas + ' > p').css('top', '33px'); $(clas + ' > p').css('font-size', '20px');
-				
-			}
-			else if (loudLevel == "Med")
-			{
-				//$(clas).css('background', 'rgba(90, 153, 212, 0.75)');
-				//$(clas).css('box-shadow', '0 0 0 0 rgba(90, 153, 212, 0.4)');
-				$(clas).css('height', '40px'); $(clas).css('width', '40px');
-				$(clas).css('margin-top', '-20px'); $(clas).css('margin-left', '-20px');
-				//$(clas).css('opacity', '0.67');
-				//$(clas + ' > p').css('top', '25px'); $(clas + ' > p').css('font-size', '18px');
-			}
-			else if (loudLevel == "Low")
-			{
-				//$(clas).css('background', 'rgba(90, 153, 212, 0.6)');
-				//$(clas).css('box-shadow', '0 0 0 0 rgba(90, 153, 212, 0.3)');
-				$(clas).css('height', '20px'); $(clas).css('width', '20px');
-				$(clas).css('margin-top', '-10px'); $(clas).css('margin-left', '-10px');
-				//$(clas).css('opacity', '0.33');
-				//$(clas + ' > p').css('top', '15px'); $(clas + ' > p').css('font-size', '16px');
-			}
-			else
-			{
-				$(clas).css('opacity', '0');
-			}
 	  }
 	  
 	  /** Error Handling. See: https://socket.io/docs/client-api/ **/
