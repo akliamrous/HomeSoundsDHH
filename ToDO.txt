@@ -3,7 +3,7 @@ ToDo:
 11a. Put some basic furniture in floorplan
 
 27. Add waveform in sound list, variable len
-30. Tag the event in the waveform (but umm, say loud?)
+33. Fix waveform timing issue. 
 
 Low priority:
 23. Send the waveform initial data on handshake...
@@ -16,6 +16,7 @@ Maybes:
 
 21. Server should send data client names and number of data clients to web clients  during handshake, and web clients should configure accordingly (eg. waveform should automatically add or remove number of waveforms, floorplan should adjust views and add names) [Tried but there's lot more failproofs needed for this]. 
 24. Basically sever should store state and client just visualizes that state.
+30. Tag the event in the waveform (but umm, say loud?)
 31. Maybe in floorplan, 50ms is too fast, reduce to 500ms, and then update... (if it looks jerky with 28).
 32. Send separate emit to different sockets (floorplan, waveform etc.) based on timing, data requirements etc. etc.
 
