@@ -1,0 +1,195 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<title>Floorplan View - Home Sound</title>
+	<style>
+	  html, body {
+		  font: 18px Helvetica, Arial;
+		  height: 99.5%;											/* Weird offset */	
+		  margin: 0;
+		  padding: 0;
+		}
+		.container {
+		  position: relative;
+		  height: 100%;
+		  width: 100%;											/* Just change width to accommodate multiple floor. Eg. 49% for two floors*/
+		  display: inline-block;
+		  margin: 0;
+		}
+		img {
+		  position: absolute;
+		  left: 50%; transform: translate(-50%,0);
+		  z-index: -1;
+		  display: block;
+		  margin-left: auto;
+		  margin-right: auto;
+		}
+			.img-first-room{
+			  width: 70%;
+			  height: 100%;
+			}
+			.img-second-room{
+			  width: 50%;
+			  height: 70%;
+			}
+			
+		.pulse-button {
+		  position: absolute;
+		  display: block;
+		  width: 100px;											/* 80px for Low, 100px for Med, 120px for Loud*/
+		  height: 100px;
+		  margin-top: -50px;									/* 40px for Low, 50px for Med, 60px for Loud*/
+		  margin-left: -50px;	
+		  border: none;
+		  border-radius: 50%;
+		  background: rgba(255, 255, 255, 0.8);
+		  box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.5);
+		  -webkit-animation: pulse 0.75s infinite;				/* This overrides any  transform though */
+		}
+		.pulse-button p {
+			position: relative;
+			display: block;
+			top: 25px;											/* 15px for Low, 25px for Med, 33px for Loud*/
+			text-align: center;
+		    font-size: 18px;									/* 16px for Low, 18px for Med, 20px for Loud*/
+		    font-weight: light;
+		    line-height: 15.5px;
+		    letter-spacing: 0px;
+			color: white;
+		}
+			.pulse-button-first-room {
+				top: 50%;
+				left: 50%;
+			}
+			
+			.pulse-button-second-room {
+				top: 35%;
+				left: 50%;
+			}
+			
+		@-webkit-keyframes pulse {
+		  0% {
+			-moz-transform: scale(0.9);
+			-ms-transform: scale(0.9);
+			-webkit-transform: scale(0.9);
+			transform: scale(0.9);
+		  }
+		  70% {
+			-moz-transform: scale(1);
+			-ms-transform: scale(1);
+			-webkit-transform: scale(1);
+			transform: scale(1);
+			box-shadow: 0 0 0 50px rgba(90, 153, 212, 0);
+		  }
+		  100% {
+			-moz-transform: scale(0.9);
+			-ms-transform: scale(0.9);
+			-webkit-transform: scale(0.9);
+			transform: scale(0.9);
+			box-shadow: 0 0 0 0 rgba(90, 153, 212, 0);
+		  }
+		}
+  </style>
+  </head>
+  <body>
+	<div class='container'>	
+		<img class="img-first-room" src="./dj-office.JPG">
+		<span class="pulse-button pulse-button-first-room"><p></p></span>
+	</div>
+	
+	<!--<div class='container'>	
+		<img class="img-second-room" src="./jon-office.jpg">
+		<span class="pulse-button pulse-button-second-room"><p>Blank</p></span>
+	</div> -->
+   
+  <script>
+	  var FIRST_ROOM = "dj-office", SECOND_ROOM = "dj-home", THIRD_ROOM = "jon-office";
+	
+	/**** Data from Socket ****/
+      var socket = io.connect({'reconnection': true, 'timeout': 5*86400*1000});					//URL is windows.location (url address of the webpage), timeout: 5 days
+     
+	  // Send handshake
+	  socket.on('connect', function () {
+		//socket.receiveBuffer = [];			//Clear buffer
+		console.log("Floorplan connected to server!");
+		socket.emit('handshake', "http-floorplan");
+	  });      
+      
+      socket.on('responseFromHttpServer', function(data){
+		  data = JSON.parse(data);
+		  
+		  //console.log("Floorplan Data:" + parseFloat(data.dataFromHttpServer) + " Room:" +  data.clientid + " Level:" + data.absLoudLevel);  
+
+		  if(data.clientid == FIRST_ROOM)
+			pulseChanger2('pulse-button-first-room', data.absLoudLevel, data.dataFromHttpServer);
+		  
+		  else if(data.clientid == SECOND_ROOM)
+			  pulseChanger2('pulse-button-second-room', data.absLoudLevel, data.dataFromHttpServer);
+	  });
+	  
+	  function pulseChanger(clas, loudLevel){
+		  
+		//$('.' + clas + ' > p').text(loudLevel);  
+		$('.' + clas).css('visibility', 'visible');
+		
+		if (loudLevel == "Loud")
+			{
+				$('.' + clas).css('background', 'rgba(90, 153, 212, 0.9)');
+				$('.' + clas).css('box-shadow', '0 0 0 0 rgba(90, 153, 212, 0.5)');
+				$('.' + clas).css('height', '120px'); $('.' + clas).css('width', '120px');
+				$('.' + clas).css('margin-top', '-60px'); $('.' + clas).css('margin-left', '-60px');	
+				$('.' + clas + ' > p').css('top', '33px'); $('.' + clas + ' > p').css('font-size', '20px');
+				
+			}
+			else if (loudLevel == "Med")
+			{
+				$('.' + clas).css('background', 'rgba(90, 153, 212, 0.75)');
+				$('.' + clas).css('box-shadow', '0 0 0 0 rgba(90, 153, 212, 0.4)');
+				$('.' + clas).css('height', '100px'); $('.' + clas).css('width', '100px');
+				$('.' + clas).css('margin-top', '-50px'); $('.' + clas).css('margin-left', '-50px');
+				$('.' + clas + ' > p').css('top', '25px'); $('.' + clas + ' > p').css('font-size', '18px');
+			}
+			else if (loudLevel == "Low")
+			{
+				$('.' + clas).css('background', 'rgba(90, 153, 212, 0.6)');
+				$('.' + clas).css('box-shadow', '0 0 0 0 rgba(90, 153, 212, 0.3)');
+				$('.' + clas).css('height', '80px'); $('.' + clas).css('width', '80px');
+				$('.' + clas).css('margin-top', '-40px'); $('.' + clas).css('margin-left', '-40px');
+				$('.' + clas + ' > p').css('top', '15px'); $('.' + clas + ' > p').css('font-size', '16px');
+			}
+			else
+			{
+				$('.' + clas).css('visibility', 'hidden');
+			}
+	  }
+	  
+	   function pulseChanger2(clas, loudLevel, value){
+		  
+		//$('.' + clas + ' > p').text(loudLevel);  
+		$('.' + clas).css('visibility', 'visible');
+		
+		if (loudLevel != "Blank")
+			{
+				var radius = value*10;
+				$('.' + clas).css('background', 'rgba(90, 153, 212, 0.9)');
+				$('.' + clas).css('box-shadow', '0 0 0 0 rgba(90, 153, 212, 0.5)');
+				$('.' + clas).css('height', radius); $('.' + clas).css('width', radius);
+				$('.' + clas).css('margin-top', -1*radius/2); $('.' + clas).css('margin-left', -1*radius/2);	
+				$('.' + clas + ' > p').css('top', '33px'); $('.' + clas + ' > p').css('font-size', '20px');
+				
+			}
+		else
+		{
+			$('.' + clas).css('visibility', 'hidden');
+		}
+	  }
+	  
+	  /** Error Handling. See: https://socket.io/docs/client-api/ **/
+	  socket.on('connect_error', function() {console.log("Floorplan: connect_error or connect_timeout");});
+	  socket.on('disconnect', function() {console.log("Flooplan: disconnected");});
+	    
+    </script>
+  </body>
+</html>

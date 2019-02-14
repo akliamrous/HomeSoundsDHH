@@ -1,0 +1,146 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<title>Floorplan View - Home Sound</title>
+	<style>
+	  body, html {
+		  font: 18px Helvetica, Arial;
+		  height: 100%;
+		  width: 100%;
+		  background-image: u);
+		  background-repeat: no-repeat;
+		  background-size: 100%;
+		  background-attachment: fixed;
+		}
+		.container {
+		  position: relative;
+		  height: 100%;
+		  width: 100%;
+		  display: block;
+		  margin: 0;
+		}
+		img {
+		  position: absolute;
+		  left: 50%; transform: translate(-50%,0);
+		  z-index: -1;
+		  display: block;
+		  margin-left: auto;
+		  margin-right: auto;
+		}
+			.img-first-room{
+			  width: 70%;
+			  height: 100%;
+			}
+			.img-second-room{
+			  width: 50%;
+			  height: 70%;
+			}
+		span {
+		  position: absolute;
+		  left: 50%;
+		  transition: opacity .5s;
+		}
+			.rect-first-room{
+			  /*Define individual room layout here */
+			  width: 66.2%; height: 94%; transform: translate(-50%, 3.3%);
+			}		
+			.rect-second-room{
+			  /*Define individual room layout here */
+			  width: 47%; height: 62%; transform: translate(-50%, 6.4%);
+			}
+		.p {
+			position: absolute;
+			top: 50%; left: 50%; transform: translate(-50%, -50%);
+			opacity: 1;
+			color: #fff;
+			vertical-align: middle;
+		}
+	
+  </style>
+  </head>
+  <body>
+	<div class='container'>	
+		<img class="img-first-room" src="./dj-office.JPG">
+		<span class="rect-first-room"></span>
+		<div class="p" id="text-first-room"><p>Blank</p></div>
+	</div>
+	
+	<div class='container'>	
+		<img class="img-second-room" src="./jon-office.jpg">
+		<span class="rect-second-room"></span>
+		<div class="p" id="text-second-room"><p>Blank</p></div>
+	</div>
+   
+    <script>
+	var FIRST_ROOM = "dj-office", SECOND_ROOM = "jon-office", THIRD_ROOM = "dj-home";
+	
+	/**** Data from Socket ****/
+      var socket = io.connect();
+      socket.on('responseFromHttpServer', function(data){
+		  
+		  data = JSON.parse(data);
+		  
+		  console.log("Floorplan Data:" + parseFloat(data.dataFromHttpServer) + " Room:" +  data.clientid + " Level:" + data.absLoudLevel);  
+
+		  if(data.clientid == FIRST_ROOM)
+	      {
+			$('#text-first-room').text(data.absLoudLevel);
+			
+			if (data.absLoudLevel == "Loud")
+			{
+				$('.rect-first-room').css('opacity', '0.6');
+				$('.rect-first-room').css('background', 'rgb(255,80,80)');
+			}
+			else if (data.absLoudLevel == "Med")
+			{
+				$('.rect-first-room').css('opacity', '0.8');
+				$('.rect-first-room').css('background', 'rgb(254,212,226)');
+			}
+			else if (data.absLoudLevel == "Low")
+			{
+				$('.rect-first-room').css('opacity', '0.2');
+				$('.rect-first-room').css('background', 'rgb(253,243,184)');
+			}
+			else
+			{
+				$('.rect-first-room').css('opacity', '0');
+				$('.rect-first-room').css('background', '#fff');
+			}
+		  }
+		  
+		  else if(data.clientid == SECOND_ROOM)
+	      {
+			  $('#text-second-room').text(data.absLoudLevel);
+			
+			if (data.absLoudLevel == "Loud")
+			{
+				$('.rect-second-room').css('opacity', '0.6');
+				$('.rect-second-room').css('background', 'rgb(255,80,80)');
+			}
+			else if (data.absLoudLevel == "Med")
+			{
+				$('.rect-second-room').css('opacity', '0.8');
+				$('.rect-second-room').css('background', 'rgb(254,212,226)');
+			}
+			else if (data.absLoudLevel == "Low")
+			{
+				$('.rect-second-room').css('opacity', '0.2');
+				$('.rect-second-room').css('background', 'rgb(253,243,184)');
+			}
+			else
+			{
+				$('.rect-second-room').css('opacity', '0');
+				$('.rect-second-room').css('background', '#fff');
+			}
+		  }
+		  	
+		  else if(data.clientid == THIRD_ROOM)
+	      {
+
+		  }		
+	  });
+    </script>
+  </body>
+</html>
