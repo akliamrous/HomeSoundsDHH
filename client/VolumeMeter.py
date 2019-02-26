@@ -8,8 +8,7 @@ CHUNK = int(RATE/20) 	# 20 update per second (100ms per update)
 p=pyaudio.PyAudio()
 stream=p.open(format=pyaudio.paInt16,channels=1,rate=RATE,input=True,
               frames_per_buffer=CHUNK)
-i=0
-#for i in range(int(10*44100/1024)):
+
 while True:
     data = np.fromstring(stream.read(CHUNK),dtype=np.int16)
     peak=np.average(np.abs(data))*2

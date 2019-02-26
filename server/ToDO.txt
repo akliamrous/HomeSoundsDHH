@@ -1,24 +1,24 @@
-ToDo: #: 44
+ToDo #51
 
-11a. Put some basic furniture in floorplan
 27. Add sparklines in sound list
-34: Correct timing of events in waveform view, and make sure they don't overall. 
-42. Waveform speed up
+34: Correct timing of events in waveform view, and make sure they don't overflow
+
+51: Server should load from file, not array. Or maybe store array in file. Because if the server restarts, you are saying that all data is gone!?
 
 40. Variable consistency between client and server (waveform: numberOfDataPoints, animationDuration, client: lengthOfGapInSec). (times should also be coordinated by server)
-44. Different visualization for duration in floorplan, perhaps a bar (as Jon discussed, though this is a low-priority)
+-44. Different visualization for duration in floorplan, perhaps a bar (as Jon discussed, though this is a low-priority)
 45. Sound list view: try different time series visualization
-46. Maybe a different visualization for spectrogram (although this could be done after first deployment)
-47. 12hr circle should show labels in grey. no dashed lines, thicker border, grey color. Thickness can vary. Floorplan should not be black bordered. Lighter border color is better.  
-48. try a color palette across waveform, floorplan circles etc. No, Red Green color blindness. 
-
+-47. 12hr circle should show labels in grey. no dashed lines, thicker border, grey color. Thickness can vary. Floorplan should not be black bordered. Lighter border color is better.  
+-48. try a color palette across waveform, floorplan circles etc. No, Red Green color blindness. 
+-49. handle handshake soundlist by filling history table.., handle handshake floorplan by filling circle, handle hanshake waveform by floor filling... Time to step towards 24 I think..
+-50. Try with four rooms
 
 Maybes: 
 21. Server should send data client names and number of data clients to web clients  during handshake, and web clients should configure accordingly (eg. waveform should automatically add or remove number of waveforms, floorplan should adjust views and add names, soundlist should initialize tables etc.) [Tried but there's lot more failproofs needed for this]. For example, automatic generate sytlesheet rules and other things based on number of rooms using https://davidwalsh.name/add-rules-stylesheets (paricularly in floorplan)
 24. (40+21) Basically sever should store state and client just visualizes that state.
-31. Maybe in floorplan, 50ms is too fast, reduce to 500ms, and then update... (if it looks jerky with 28).
 38: Add variable arcs (arcs showing 1 hour average data) in floorplan (based on Liang's discussion).
 41. Map different frequencies to different colors: identify speech and non-speech sounds for example (200-1000 is mapped to a different color).
+46. Maybe a different visualization for spectrogram (although this could be done after first deployment)
 
 Done: 
 1. Floorplan backend: Server recognizes high, med, low, blank. (very basic - heuristic)
@@ -31,7 +31,7 @@ Done:
 8. Fix and test backend (it sometimes stops updating for some reason... maybe have one web client connection instead of 3? or maybe not?). do noise filtering as well
 9. Zoom using css zoom and touchscreen.. (no scroll, for now can also just switch for Jon)
 10. Screen bars (delimiters) sould be 1px grey. Soundlist column width adjust to look better.
-11b. and use circles instead of boxes in floorplan.  
+11. Put some basic furniture in floorplan and use circles instead of boxes in floorplan.  
 12. Adjust y-axis scales on waveform so that all waveforms have common values. Also make sure if max-data is less than say 0.1, just make everything 0.1 and increase scale to 1 or something.
 15. For soundlist, figure out a way to display past missed data as well. (Ooooh!)
 18. Sometimes the console gets stuck and control C runs the process. (Because of having child.stdout.on everytime the socket.on is connected)
@@ -44,11 +44,13 @@ Done:
 28. Add circles in floorplan for past history 
 29. Animation interpolation in floor-plan
 30. Tag the event in the waveform (but umm, say loud?)
+31. Maybe in floorplan, 50ms is too fast, reduce to 500ms, and then update...
 32. Send separate emit to different sockets (floorplan, waveform etc.) based on timing, data requirements etc. etc.
 33. Show past 30 seconds in the waveform. 
 35: Add pitch in waveform view.
 36. Add summary data in soundlist view.
 37. Add duration in floorplan view (in progress but box shadow did not work -- tried for 4 hrs, perhaps I should try color?)
+42. Waveform speed up
 43. Duration -- box shadow should stay...
 
 Removed: 
@@ -56,27 +58,24 @@ Removed:
 
 
 
+Tests to run after changing code:
+0. All views look good.
+1. Server gone and back up.
+2. Each client gone and back up. 
+3. Reload views.
+4. For checking, keep one tablet session always open (without refresh) like how it would look on a deployed tablet.
 
+Tablet Install list:
+1. Chrome, dropbox
+2. python "2.7.14", pyaudio, numpy
+3. node.js (all modules are included in the client dropbox folder so no need to install)
+More steps:
+1. Disable tablet mode and Disable touchscreen
+2. Enable remote login, save ip, and test
+3. Disable screen off
+4. set microphone level to 71.
 
-
-Testing:
-
-1. Server off for a long time (4hr 45mins). But data client and web-waveform client was on. Both connected successfully on server back up!
-2. Server running, all web clients and 1 data client disconnected and connected several times, no problems!
-3. 6 connections from mobile and chrome on desktop. Not a problem!
-4. Short time disconnecting, connecting with all 3 web clients and 1 data client. Not a problem.
-
-#5. Pilot test with home... (2-5 data clients, 6-15 web sockets).
-#Problem: Web client connects to server again, data is really fast... (which spoils with timing).. Something wrong from the data client side... it starts sending fast... (reconnecting data client solves the problem..)
-
-
-Waveform performance increase in that order:
-Performance increase in that order:
-1. enter-update-delete
-2. Then canvas. 
-3. Then vega-lite. 
-4. Then web-gl
-
-REMEMBER: IF YOU CHANGE UPDATE TIME, YOU HAVE TO CHANCE SERVER AND WAVEFORM. AND "RESTART EVERYTHING"
-
-ALSO REMEMBER: FOR TABLETS, ALLOW CHROME TO TAKE MORE CPU.
+Tablet List: 
+1. DESKTOP-GMDHC5I - Jon's office. My old surface pro borrowed from CSE.
+2. DESKTOP-BR1L0RT - DJ's office. My Desktop in CSE2.
+3. DESKTOP-UIEOBVU - DJ's home. First refurbished tablet ordered from grant. 
