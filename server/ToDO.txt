@@ -70,10 +70,20 @@ Tablet Install list:
 2. python "2.7.14", pyaudio, numpy
 3. node.js (all modules are included in the client dropbox folder so no need to install)
 More steps:
-1. Disable tablet mode and Disable touchscreen
-2. Enable remote login, save ip, and test
-3. Disable screen off
-4. set microphone level to 71.
+1. Disable tablet mode.
+2. Enable rotation lock (to do this disconnect keyboard first). 
+3. Disable power button, sleep button, lid settings
+4. Disable lockscreen 
+5. Disable screen off on plugged in, make it 2 hours on battery power
+6. Set brightness full (disable auto brightness). Set night light on.
+7. Disable touchscreen. 
+7. Enable remote login, save ip, and test (install chrome remote login which shouldn't give probs as windows remote login)
+8. Set microphone level to 71.
+
+Fail proofs:
+1. Windows on top of everything.
+2. Disable lock screen
+3. In worse case, remote login (with no lock screen). This will work if tablet shuts down or something as well. Then user can switch it on and I can do the rest. (Leave hole for power button.) [same as SSH]
 
 Tablet List: 
 1. DESKTOP-GMDHC5I - Jon's office. My old surface pro borrowed from CSE.
