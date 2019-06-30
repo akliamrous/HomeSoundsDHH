@@ -1,0 +1,157 @@
+<html lang="en">
+
+<head>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/css/index.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/index.min.js"></script>
+    <style>
+        .bookmark-container {
+            position: absolute;
+            width: 50%;
+            margin-left: 10%;
+        }
+
+        .form-container {
+            background-color: #fff;
+            box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 20px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.3);
+            margin-left: 0;
+            border-radius: 8px;
+            font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+        }
+
+        p {
+            margin-bottom: 0;
+        }
+
+        #input1 {
+            display: inline-block;
+            width: 50%;
+            height: 25px;
+            margin-left: 5px;
+            padding-left: 5px;
+        }
+
+        .simple-keyboard {
+            position: absolute;
+            display: inline-block;
+            width: 800px;
+            left: 31%;
+            top: 18%;
+        }
+
+        label {
+            font-weight: normal;
+        }
+    </style>
+</head>
+
+
+<body>
+    <div class="bookmark-container">
+        <div class="row " style="margin-top: 50px"></div>
+        <div class="col-md-6 col-md-offset-3 form-container">
+            <h2>Record Feedback</h2>
+            <div id="reused_form">
+                <div class="row">
+                    <div class="col-sm-12 form-group">
+                        <p style="margin-bottom: 5px;"><b>Why are you bookmarking this screen?</b></p>
+                        <p>
+                            <label>
+                                <input type="radio" name="radio_button" id="radio_button" value="interesting">
+                                I noticed something interesting
+                            </label>
+                            <p>
+                                <label>
+                                    <input type="radio" name="radio_button" id="radio_button" value="error">
+                                    I noticed an error
+                                </label>
+                            </p>
+                            <p>
+                                <label>
+                                    <input type="radio" name="radio_button" id="radio_button" value="other">
+                                    Other
+                                    <input type="text" class="form-control" id="input1" placeholder="Please specify">
+                                </label>
+                            </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 form-group">
+                        <p style="margin-bottom: 5px;"><b>Comments:</b></p>
+                        <textarea class="form-control" type="textarea" name="comments" id="input2"
+                            placeholder="Your Comments" maxlength="6000" rows="7"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 form-group">
+                        <button type="cancel" class="btn btn-lg btn-default btn-block" id="cancel">Cancel</button>
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <button type="submit" class="btn btn-lg btn-success btn-block" id="submit">Submit</button>
+                    </div>
+                </div>
+            </div>
+            <div id="success_message" style="width:100%; display:none; ">
+                <h3>Your page is bookmarked!</h3>
+            </div>
+        </div>
+        <div class="simple-keyboard"></div>
+    </div>
+    </div>
+</body>
+
+<script>
+    $(':button[type="cancel"]').click(function () {
+        $('.bookmark-container').hide();
+    });
+
+    $(':button[type="submit"]').click(function () {
+        var othersText = $('#input1').val();
+        var commentText = $('#input2').val();
+
+        var selectedRadio = $("input[type='radio'][name='radio_button']:checked").val();
+        console.log(selectedRadio);
+
+        //send socket along with document.innerHTML value gathered earlier.
+
+        $('.bookmark-container').hide();
+    });
+
+    //$('#success_message').show();
+    var selectedInput;
+    let Keyboard = window.SimpleKeyboard.default;
+
+    let myKeyboard = new Keyboard({
+        onChange: input => onChange(input)
+    });
+
+    document.querySelectorAll('.form-control')
+        .forEach(input => input.addEventListener('focus', onInputFocus));
+
+    function onInputFocus(event) {
+        // Setting input as selected
+        selectedInput = `#${event.target.id}`;
+
+        // Set the inputName option on the fly !
+        myKeyboard.setOptions({
+            inputName: event.target.id
+        });
+    }
+
+    function onChange(input) {
+        // If the input is not defined, grabbing the first ".form-control".
+        let currentInput = selectedInput || ".form-control";
+
+        // Updating the selected input's value
+        document.querySelector(currentInput).value = input;
+    }
+
+    $(".simple-keyboard").hide();
+    $(window).on('click', () => { $(".simple-keyboard").hide(); });
+    $(".form-control, .simple-keyboard").on('click', (event) => { event.stopPropagation(); $(".simple-keyboard").show(); });
+
+</script>
+
+</html>

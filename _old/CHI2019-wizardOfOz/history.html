@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+  <head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="shortcut icon" type="image/png" href="https://cdns.iconmonstr.com/wp-content/assets/preview/2012/240/iconmonstr-sound-wave-4.png"/>  
+    <title>History View - Home Sounds</title>
+    <style>
+      body { font: 24px Helvetica, Arial; }
+
+	* {
+	  box-sizing: border-box;
+	}
+
+	#myInput {
+	  background-image: url('https://www.w3schools.com/css/searchicon.png');
+	  background-position: 10px 10px;
+	  background-repeat: no-repeat;
+	  width: 100%;
+	  font-size: 18px;
+	  padding: 12px 20px 12px 40px;
+	  border: 1px solid #ddd;
+	  margin-bottom: 12px;
+	  right: 0;
+	}
+
+	#myTable {
+	  border-collapse: collapse;
+	  width: 100%;
+	  border: 1px solid #ddd;
+	  font-size: 20px;
+	}
+
+	#myTable th, #myTable td {
+	  text-align: left;
+	  padding: 12px;
+	}
+
+	#myTable tr {
+	  border-bottom: 1px solid #ddd;
+	}
+
+	#myTable tr.header, #myTable tr:hover {
+	  background-color: #f1f1f1;
+	}  
+    </style>
+  </head>
+  <body>
+    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for sounds..." title="Type in a name">
+    <table id="myTable">
+	  <tr class="header">
+		<th style="width:25%;">Time</th>
+		<th style="width:%;">Sound</th>
+		<th style="width:35%;">Location</th>
+      </tr>
+      <tr> <td>16:01:21</td> <td>Baby crying</td> <td>Bedroom</td> </tr>
+      <tr> <td>16:01:32</td> <td>Speech</td> <td>Bedroom</td> </tr>
+	  <tr> <td>16:02:42</td> <td>Child playing</td> <td>Living room</td> </tr>
+      <tr> <td>16:05:41</td> <td>Refrigerator open</td> <td>Kitchen</td> </tr>
+	  <tr> <td>16:05:57</td> <td>Refrigerator close</td> <td>Kitchen</td> </tr>
+      <tr> <td>16:06:14</td> <td>Liquid Pour</td> <td>Kitchen</td> </tr>
+	  <tr> <td>16:06:59</td> <td>Singing</td> <td>Living room</td> </tr>
+      <tr> <td>16:08:11</td> <td>Baby laughing</td> <td>Living room</td> </tr>
+	  <tr> <td>16:15:11</td> <td>Washer starts</td> <td>Bathroom</td> </tr>
+	  <tr> <td>16:17:41</td> <td>Water running</td> <td>Kitchen</td> </tr>
+	  <tr> <td>16:21:11</td> <td>Cutlery</td> <td>Kitchen</td> </tr>
+      <tr> <td>16:30:44</td> <td>Furniture moving</td> <td>Living room</td> </tr>
+      <tr> <td>16:31:13</td> <td>Speech</td> <td>Living room</td> </tr>
+      <tr> <td>16:35:53</td> <td>Baby laughing</td> <td>Living room</td> </tr>
+      <tr> <td>16:45:12</td> <td>Washer stops</td> <td>Bathroom</td> </tr>
+	  <tr> <td>16:48:04</td> <td>Dryer starts</td> <td>Bathroom</td> </tr>
+	  <tr> <td>17:00:53</td> <td>Door open</td> <td>Lobby</td> </tr>
+	  <tr> <td>17:00:59</td> <td>Door close</td> <td>Lobby</td> </tr>		
+	</table>
+        
+        
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+
+    
+    <script>
+	function myFunction() {
+	  var input, filter, table, tr, td, i;
+	  input = document.getElementById("myInput");
+	  filter = input.value.toUpperCase();
+	  table = document.getElementById("myTable");
+	  tr = table.getElementsByTagName("tr");
+	  for (i = 0; i < tr.length; i++) {
+		td = tr[i].getElementsByTagName("td")[1];
+		if (td) {
+		  if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+			tr[i].style.display = "";
+		  } else {
+			tr[i].style.display = "none";
+		  }
+		}       
+	  }
+	}
+	</script>
+	
+  </body>
+</html>

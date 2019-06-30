@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="author" content="jm3">
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <title>d3 audio waveforms</title>
+    
+    <!--<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Roboto:400,100|Raleway:400,200|Amatic+SC"> -->
+    <style>
+		* {
+		  margin:      0;
+		  font-family: Helvetica, Arial;
+		}
+		html {
+		  margin: 1.0em;
+		}
+		h1 {
+		  font-size:    48px;
+		  font-weight:  bold;
+		}
+		h1 a,
+		h1 a:visited {
+		  text-decoration:  none;
+		  font-weight:      normal;
+		  font-size:        90%;
+		  color:            #000;
+		  border-bottom:    1px dashed #bbb;
+		}
+		h1 a:hover {
+		  color: red;
+		}
+		.waveform > svg,
+		.waveform > div {
+		  border:       2px solid #ddd;
+		  height:       140px;
+		  margin-left:  40px;
+		  padding:      2px;
+		  position:     relative;
+		  width:        600px;												/* Change width to incorporate more elements, but reduce points */
+		  display:  	inline-block;
+		}
+		h2 {
+		  margin-left:  40px;
+		  font-size:    22px;
+		  color: 		#666;
+		  display: 		inline;
+		}
+		.waveform > div div.bar {
+		  background-color:  red;
+		  position:          absolute;
+		}
+		.waveform .svg1 g rect {
+		  fill:     red;
+		  //opacity:  0.5;
+		}
+		.waveform .svg2 g rect {
+		  fill:     green;
+		  //opacity:  0.5;
+		}
+		.axis {
+		  position: absolute;
+		  position: absolute;
+		  top:      4px;
+		  left:    -40px;
+		}
+		.axis g path.domain {
+		  display: none;
+		}
+		.axis g text {
+		  font-family: 'Roboto', sans-serif;
+		  opacity:      0.5;											//Opacity reduces performance
+		  font-size:    10px;
+		}
+    </style> 
+  </head>
+  <body>
+	<h2 style="margin-right: 500px">DJ's Home</h2><h2>DJ's Office</h2>    
+    <div class="page">
+      <div class="waveform">
+        <div class="svg1"></div>									
+        <div class="svg2"></div>								
+      </div>
+    </div>
+
+    <script>
+	/* Performance is increased by reducing the number of data points or by reducing data updatae time.
+	 * If you reduce the number of data points, the granurality is lower and hence you can use the functions below (divide by 2 etc.) to make it all look better.
+	 * Another trick (not recommended) is to increase the data updatae time while also increasing the points (coz generating 512 point time is not double of 256 point time)
+	 * This way the eye wouldn't see big lines moving too fast....
+	 */
+		var FIRST_ROOM = "dj-home", SECOND_ROOM = "dj-office", THIRD_ROOM = "jon-office";
+		
+		var wave_json1 = Array.from({length: 256}, () => 0.0);						// Number of points  = 256. Orig = 1024 (which increases granurality but decreases performance and also decreases speed of updatae of waveform)
+		var wave_json2 = Array.from({length: 256}, () => 0.0);
+		var width = 600, height = 140; 		
+		var min_max_val = 1.5;							// IMP: CHANGE BASED ON MIC VOLUME AND HOW IT LOOKS. Remeber that graph doesn't show all value.
+		var max_val = min_max_val;
+		
+		/**** data from Socket ****/
+		  var socket = io.connect();					//URL is windows.location (url address of the webpage), timeout: 5 days
+		  
+		  // Send handshake
+		  socket.on('connect', function () {
+			//socket.receiveBuffer.length = 0;			//Clear buffer
+			//socket.sendBuffer.length = 0;
+			console.log("Waveform connected to server!");
+			socket.emit('handshake', "http-waveform");
+		  });
+		  
+		  socket.on('responseFromHttpServer', function(data){	
+			  data = JSON.parse(data);
+			  if(data.clientid == FIRST_ROOM)
+			  {
+				y1 = parseFloat(data.dataFromHttpServer);
+				wave_json1.shift();
+				wave_json1.push(y1);
+				
+				/* To handle that all waveforms have same y scales */
+				max_val = d3.max(wave_json1.concat(wave_json2), function(d) { return d; });	//Concat arrays based on number of waveforms
+				if (max_val < min_max_val) max_val = min_max_val;				 				// If volume is too low, don't want the scale to show high //
+				
+				d3.selectAll(".svg1 svg").remove();
+				svg_render(wave_json1, ".waveform > .svg1", max_val);		// Note that max_val is updataed in the next cycle
+			  }
+			  
+			  if(data.clientid == SECOND_ROOM)
+			  {
+				y2 = parseFloat(data.dataFromHttpServer);
+				wave_json2.shift();
+				wave_json2.push(y2);
+				
+				/* To handle that all waveforms have same y scales */
+				max_val = d3.max(wave_json1.concat(wave_json2), function(d) { return d; });	//Concat arrays based on number of waveforms
+				if (max_val < min_max_val) max_val = min_max_val;				 				// If volume is too low, don't want the scale to show high //
+				
+				d3.selectAll(".svg2 svg").remove();
+				svg_render(wave_json2, ".waveform > .svg2", max_val);
+			  }
+			  
+			  if(data.clientid == SECOND_ROOM)
+			  {
+				y2 = parseFloat(data.dataFromHttpServer);
+				wave_json2.shift();
+				wave_json2.push(y2);
+				
+				/* To handle that all waveforms have same y scales */
+				max_val = d3.max(wave_json1.concat(wave_json2), function(d) { return d; });	//Concat arrays based on number of waveforms
+				if (max_val < min_max_val) max_val = min_max_val;				 				// If volume is too low, don't want the scale to show high //
+				
+				d3.selectAll(".svg2 svg").remove();
+				svg_render(wave_json2, ".waveform > .svg3", max_val);
+			  }
+		  });
+
+		/**** Waveform *****/
+		function svg_render(data, svg, max_val) {
+		  var node = d3.select(svg).append("svg")
+			.attr("class","chart")
+			.attr("width", width)
+			.attr("height", height);
+
+		  var y = d3.scale.linear().range([height, -height]);
+		  y.domain([-max_val, max_val]);
+		  var x = d3.scale.linear().domain([0, data.length]);
+		  var bar_width = width / (data.length*2);							// Dividing by 2 reduces the number of path points. This allows to reduce the array length above while keeping same granularity (width of bars) by introducing space between the bars
+
+		  var bar = node.selectAll("g")
+			.data(data)
+			.enter().append("g") // svg "group"
+			.attr("transform", function(d, i) {
+			  return "translate(" + i * bar_width * 2 + ",0)";				// Multiplying by 2 reduces the number of path points by adding space between points
+			});
+
+		  bar.append("rect")
+			.attr("y", function(d) {
+			  var yv = height - Math.abs(y(d)/2) - height/2 + 2;
+			  return yv;
+			})
+			.attr("height", function(d) {
+			  return Math.abs(y(d)); })
+			.attr("width", bar_width );
+
+		  /* Removed axis to improve performance */
+		  
+		  var axis = d3.svg.axis()
+			.scale(y)
+			.ticks(12)
+			.orient("left");
+
+		  d3.select(svg).append("svg")
+			.attr("class", "axis")
+			.attr("width", 60)
+			.attr("height", height)
+			.append("g")
+			.attr("transform", "translate(40," + (height/2) + ")" )
+			.call(axis);
+		}
+
+		function d( s ) {
+		  console.log( "log: " + s );
+		}
+		
+	  /** Error Handling. See: https://socket.io/docs/client-api/ **/
+	  socket.on('connect_error', function() {console.log("Waveform: connect_error or connect_timeout");});
+	  socket.on('disconnect', function() {console.log("Waveform: disconnected");});
+    </script>
+  </body>
+</html>

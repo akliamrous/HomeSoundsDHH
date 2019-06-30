@@ -1,0 +1,34 @@
+<html>
+<head>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/css/index.css">
+  <script src="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/index.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+</head>
+
+<body>
+  <input class="input" placeholder="Tap on the virtual keyboard to start" />
+  <div class="simple-keyboard" style="width: 50%;"></div>
+
+  <script>
+    let Keyboard = window.SimpleKeyboard.default;
+
+    let myKeyboard = new Keyboard({
+    onChange: input => onChange(input),
+    onKeyPress: button => onKeyPress(button)
+    });
+
+    function onChange(input) {
+    document.querySelector(".input").value = input;
+    console.log("Input changed", input);
+    }
+
+    function onKeyPress(button) {
+    console.log("Button pressed", button);
+    }
+    
+    $(".simple-keyboard").hide();
+    $("input").on('touchenter mouseenter', () => {$(".simple-keyboard").show();}); 
+    $("input").on('touchleave mouseleave', () => {$(".simple-keyboard").hide();});
+</script>
+</body>
+</html>

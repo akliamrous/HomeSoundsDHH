@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>HomeSounds - Makeability Lab </title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/css/index.css">
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="/path/to/jquery.keyframes[.min].js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/index.min.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script>
+        d3version5 = d3
+        window.d3 = null 
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+    <script>
+        d3version3 = d3
+        window.d3 = null
+    </script>
+
+
+    <title>Floorplan View - Home Sound</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <style>
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            margin: auto;
+            padding: 0;
+            background-color: #ffffff;
+            font-family: Montserrat, Helvetica;
+            font-size: 18px;
+        }
+
+        .time-container {
+            height: 8%;
+            overflow: hidden;
+        }
+
+        .floorwave-container {
+            height: 100%;
+            width: 60%;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        .soundlist-container {
+            height: 42%;
+        }
+
+        .bookmark-container {
+            position: absolute;
+            top: 5%;
+            left: 55.7%;
+            width: 65%;
+            height: 60%;
+            margin-left: 10%;
+            z-index: 4;
+            display: none;
+        }
+
+        /** Soundlist Style Sheet **/
+
+        .axis text {
+            font: 18px Montserrat;
+            font-weight: bold;
+            fill: #999;
+            transform: translateX(-5px);
+        }
+
+        .chartTitle {
+            font-size: 12px;
+            font-weight: bold;
+            text-anchor: middle;
+        }
+
+        .axis .title {
+            font-weight: bold;
+            text-anchor: middle;
+        }
+
+        .axis path {
+            fill: none;
+            stroke: #ddd;
+            stroke-width: 5px;
+            shape-rendering: crispEdges;
+        }
+
+        .axis line {
+            fill: none;
+            stroke: #ddd;
+        }
+
+        .x.axis path {
+            visibility: hidden;
+        }
+
+
+        .well {
+            padding-top: 0px;
+            padding-bottom: 0px;
+        }
+
+        /** Floorplan Style Sheet **/
+        .container {
+            position: relative;
+            /* Just change width to accommodate multiple floor. Eg. 49% for two floors*/
+            display: inline-block;
+            margin: 0;
+            padding: 0;
+        }
+
+        h3 {
+            position: absolute;
+            display: block;
+            right: 1%;
+            top: 1.5%;
+            /* 15px for Low, 25px for Med, 33px for Loud*/
+            text-align: center;
+            font-size: 36px;
+            /* 16px for Low, 18px for Med, 20 for Loud*/
+            line-height: 15.5px;
+            letter-spacing: 0;
+            background: rgb(255, 255, 255);
+            padding: 18px;
+            border-radius: 8px;
+            z-index: 4;
+            display: none;
+            transition-duration: 0.4s;
+        }
+
+        img {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .pulse-button {
+            position: absolute;
+            display: block;
+            width: 40;
+            /* 20 for Low, 40 for Med, 60 for Loud*/
+            height: 40;
+            margin-top: -20;
+            /* 10 for Low, 20 for Med, 30 for Loud*/
+            margin-left: -20;
+            border: none;
+            border-radius: 50%;
+            animation: pulse 0.4s infinite;
+            /* This overrides any  transform though */
+            transition: margin-top 0.2s, margin-left 0.2s, width 0.2s, height 0.2s, opacity 0.2s;
+            z-index: 1;
+        }
+
+        .pulse-button p {
+            position: relative;
+            display: block;
+            top: 25px;
+            /* 15px for Low, 25px for Med, 33px for Loud*/
+            text-align: center;
+            font-size: 18px;
+            /* 16px for Low, 18px for Med, 20 for Loud*/
+            line-height: 15.5px;
+            letter-spacing: 0;
+            color: white;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.9);
+            }
+
+            70% {
+                transform: scale(1);
+            }
+
+            100% {
+                transform: scale(0.9);
+            }
+        }
+
+        .circleLarge {
+            position: absolute;
+            display: block;
+            width: 0;
+            height: 0;
+            margin-top: 0;
+            margin-left: 0;
+            opacity: 0.3;
+            background: none;
+            border: solid 2px;
+            border-radius: 50%;
+            transition: margin-top 1s, margin-left 1s, width 1s, height 1s;
+            z-index: 2;
+        }
+
+        .circleSmall {
+            position: absolute;
+            display: block;
+            width: 0;
+            height: 0;
+            margin-top: 0;
+            margin-left: 0;
+            opacity: 0.7;
+            background: none;
+            border: solid 2px;
+            border-radius: 50%;
+            transition: margin-top 1s, margin-left 1s, width 1s, height 1s;
+            z-index: 2;
+        }
+
+        .duration-bar {
+            position: absolute;
+            display: block;
+            width: 81px;
+            height: 16px;
+            border: solid 1px;
+            margin-left: -43px;
+            margin-top: -66px;
+            border-radius: 2px;
+            z-index: 2;
+            visibility: hidden;
+        }
+
+        .duration-fill {
+            position: absolute;
+            width: 0;
+            height: 14px;
+            padding-left: 3.5px;
+            padding-top: 2.5px;
+            padding-bottom: 1px;
+            text-align: left;
+            font-size: 11px;
+            margin-left: -42px;
+            margin-top: -65px;
+            line-height: 10px;
+            color: #000;
+            font-weight: bold;
+            transition: width 0.24s;
+            opacity: 0.5;
+            z-index: 2;
+        }
+
+        /* container location */
+        .first-floor {
+            height: 100%;
+            width: 49%;
+        }
+
+        .second-floor {
+            height: 100%;
+            width: 49%;
+            top: -0.2%;
+            left: 1.3%;
+        }
+
+        /* pulse and circle location */
+        .first-room {
+            left: calc(1.95%*20);
+            top: calc(3.47%*200/6.653);
+        }
+
+        .second-room {
+            left: calc(4.74%*20);
+            top: calc(3.47%*200/6.653);
+        }
+
+        .third-room {
+            left: calc(8.36%*20);
+            top: calc(0.80%*200/6.653);
+        }
+
+        .fourth-room {
+            left: calc(3.75%*20);
+            top: calc(1.03%*200/6.653);
+        }
+
+        .fifth-room {
+            left: calc(3.75%*20);
+            top: calc(2.51%*200/6.653);
+        }
+
+        /* image location */
+        .img-first-floor {
+            width: 100%;
+            height: 100%;
+        }
+
+        .img-second-floor {
+            width: 100%;
+            height: 100%;
+        }
+
+
+        /** Waveform Style Sheet **/
+
+        .waveform>svg,
+        .waveform>div {
+            /*border: 2px solid #ccc;*/
+            height: 80px;
+            position: absolute;
+            display: inline-block;
+            overflow: hidden;
+            /*background-color: rgba(255, 255, 255, 0.7);*/
+            z-index: 0.5;
+        }
+
+        /* waveform location */
+        .svg-first-room {
+            width: calc(2.97%*20);
+            left: calc(0.41%*20);
+            top: calc(3.85%*200/6.653);
+        }
+
+        .svg-second-room {
+            width: calc(2.47%*20);
+            left: calc(3.46%*20);
+            top: calc(3.85%*200/6.653);
+        }
+
+        .svg-third-room {
+            width: calc(2.60%*20);
+            left: calc(7.07%*20);
+            top: calc(1.2%*200/6.653);
+        }
+
+        .svg-fourth-room {
+            width: calc(2.17%*20);
+            left: calc(2.66%*20);
+            top: calc(1.5%*200/6.653);
+        }
+
+        .svg-fifth-room {
+            width: calc(2.17%*20);
+            left: calc(2.66%*20);
+            top: calc(2.65%*200/6.653);
+        }
+
+        .waveform>div div.bar {
+            position: absolute;
+        }
+
+        h1 {
+            margin-left: 3px;
+            font-size: 12px;
+            color: #999;
+            font-family: Montserrat, Helvetica;
+            font-weight: bold;
+            position: absolute;
+            top: 16%;
+            left: 35%;
+            display: none;
+        }
+
+        h2 {
+            /*margin-left: 3px;
+			font-size: 22px;
+			color: #999;
+			font-family: Montserrat, Helvetica;
+			font-weight: bold; */
+            position: absolute;
+            top: 65%;
+            left: 2%;
+            font: 17px Montserrat;
+            color: #777;
+        }
+
+        .marquee {
+            color: #666;
+            font-size: 12px;
+            position: absolute;
+            top: calc(100% - 14px);
+            width: 100%;
+            height: 100%;
+            animation: marquee 28.4s linear;
+            white-space: nowrap;
+        }
+
+        @keyframes marquee {
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        h5 {
+            position: absolute;
+            top: 0;
+            left: 30%;
+            top: 3%;
+            font: 18px Montserrat;
+            color: #000;
+            display: none;
+            z-index: 6;
+            background-color: #fff;
+        }
+
+        /*
+        button {
+            position: absolute;
+            right: 0.5%;
+            top: 0.5%;
+            border: 1px solid #aaa;
+            background-color: #fff;
+            font: 18px Montserrat;
+            color: #888;
+        } */
+
+        /* Bookmark style */
+
+        .form-container {
+            background-color: #fff;
+            box-shadow: 0 2px 24px 2px rgba(0, 0, 0, 0.1), 0 2px 24px 2px rgba(0, 0, 0, 0.2), 0 2px 24px 2px rgba(0, 0, 0, 0.1), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
+            margin-left: 0;
+            border-radius: 8px;
+            font-family: 'Montserrat', Helvetica, sans-serif;
+        }
+
+        p {
+            margin-bottom: 0;
+        }
+        
+        #input0 {
+            display: inline-block;
+            width: 20%;
+            height: 25px;
+            margin-left: 5px;
+            padding-left: 5px;
+            font-size: 18px;
+        }
+
+        #input1 {
+            display: inline-block;
+            width: 70%;
+            height: 25px;
+            margin-left: 5px;
+            padding-left: 5px;
+            font-size: 18px;
+        }
+
+        #input2 {
+            font-size: 18px;
+        }
+
+        .simple-keyboard {
+            display: inline-block;
+            position: absolute;
+            width: 72%;
+            left: -72.1%;
+            top: 35%;
+            z-index: 5;
+        }
+
+        label {
+            font-weight: normal;
+        }
+
+        h4 {
+            font-size: 40px;
+            font-family: 'Montserrat', Helvetica, sans-serif;
+            margin-left: -2px;
+            padding-top: 5px;
+        }
+
+        .time {
+            display: inline-block;
+            position: absolute;
+            left: 2%;
+            top: 2%;
+            font-size: 40px;
+        }
+
+        .bookmark-button {
+            display: inline-block;
+            position: absolute;
+            right: 2%;
+            top: 3.5%;
+            border: 2px solid #777;
+            background-color: white;
+            border-radius: 8px;
+            font-size: 18px;
+            transition-duration: 0.4s;
+        }
+
+        .bookmark-button:focus {
+            outline: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!--<button>Bookmark</button>-->
+    <h5></h5>
+    <div class="time-container"></div>
+    <p class="time">Time updating...</p> <button class="bookmark-button">Bookmark</button>
+    <div class="floorwave-container">
+        <h3>Bookmarked!</h3>
+        <div class='container first-floor'>
+            <img class="img-first-floor" src="./floor1.png">
+            <span class="circleLarge first-room"></span>
+            <span class="circleSmall first-room"></span>
+            <span class="pulse-button first-room"></span>
+            <span class="duration-bar first-room"></span>
+            <span class="duration-fill first-room"></span>
+
+            <div class="waveform">
+                <div class="svg-first-room">
+                    <h1>Not connected</h1>
+                    <!--<h2>Floor 1- Study</h2>-->
+                </div>
+            </div>
+
+            <span class="circleLarge second-room"></span>
+            <span class="circleSmall second-room"></span>
+            <span class="pulse-button second-room"></span>
+            <span class="duration-bar second-room"></span>
+            <span class="duration-fill second-room"></span>
+
+            <div class="waveform">
+                <div class="svg-second-room">
+                    <h1>Not connected</h1>
+                    <!--<h2>Floor 2- Playroom</h2>-->
+                </div>
+            </div>
+
+            <span class="circleLarge third-room"></span>
+            <span class="circleSmall third-room"></span>
+            <span class="pulse-button third-room"></span>
+            <span class="duration-bar third-room"></span>
+            <span class="duration-fill third-room"></span>
+
+            <div class="waveform">
+                <div class="svg-third-room">
+                    <h1>Not connected</h1>
+                    <!--<h2>Floor 2- Bedroom</h2>-->
+                </div>
+            </div>
+        </div>
+
+        <div class='container second-floor'>
+            <img class="img-second-floor" src="./floor2.png">
+
+            <span class="circleLarge fourth-room"></span>
+            <span class="circleSmall fourth-room"></span>
+            <span class="pulse-button fourth-room"></span>
+            <span class="duration-bar fourth-room"></span>
+            <span class="duration-fill fourth-room"></span>
+
+            <div class="waveform">
+                <div class="svg-fourth-room">
+                    <h1>Not connected</h1>
+                    <!--<h2>Floor 1- Living</h2>-->
+                </div>
+            </div>
+
+            <span class="circleLarge fifth-room"></span>
+            <span class="circleSmall fifth-room"></span>
+            <span class="pulse-button fifth-room"></span>
+            <span class="duration-bar fifth-room"></span>
+            <span class="duration-fill fifth-room"></span>
+
+            <div class="waveform">
+                <div class="svg-fifth-room">
+                    <h1>Not connected</h1>
+                    <!--<h2>Floor 1- Kitchen</h2>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="soundlist-container">
+        <div style="max-width: 1800px; max-height: 400px; padding-left: 17px">
+            <div id="viewDiv"></div>
+        </div>
+    </div>
+
+    <div class="bookmark-container">
+        <div class="row " style="margin-top: 50px"></div>
+        <div class="col-md-6 col-md-offset-3 form-container">
+            <h4>Bookmark</h4>
+            <div id="reused_form">
+                <div class="row">
+                    <div class="col-sm-12 form-group">
+						<p style="margin-bottom: 15px; margin-top: 5px;"><b>Please enter your Id:</b>
+						<input type="text" class="form-control" id="input0" placeholder="e.g., P1">
+						</p> 
+                        <p style="margin-bottom: 5px; margin-top: 5px;"><b>Why are you bookmarking this screen?</b></p>
+                        <p>
+                            <label>
+                                <input type="radio" name="radio_button" id="radio_button" value="interesting">
+                                I noticed something interesting
+                            </label>
+                            <p>
+                                <label>
+                                    <input type="radio" name="radio_button" id="radio_button" value="error">
+                                    I noticed an error
+                                </label>
+                            </p>
+                            <p>
+                                <label>
+                                    <input type="radio" name="radio_button" id="radio_button" value="other">
+                                    Other
+                                    <input type="text" class="form-control" id="input1" placeholder="Please specify">
+                                </label>
+                            </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 form-group">
+                        <p style="margin-bottom: 5px;"><b>Comments:</b></p>
+                        <textarea class="form-control" type="textarea" name="comments" id="input2"
+                            placeholder="Your Comments" maxlength="6000" rows="7"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 form-group">
+                        <button type="cancel" class="btn btn-lg btn-default btn-block" id="cancel">Cancel</button>
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <button type="submit" class="btn btn-lg btn-success btn-block" id="submit">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="simple-keyboard"></div>
+    </div>
+
+    <script>
+        'use strict';
+
+        var numOfFloors = 1;
+        var numOfClients = 3;
+
+        function timeUpdater() {
+            var date = new Date;
+            var hours = date.getHours();
+            var minutes = date.getMinutes();
+            var ampm = hours >= 12 ? 'pm' : 'am';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            window.requestAnimationFrame(() => {
+                $(".time").text(hours + ':' + minutes + ' ' + ampm);
+            });
+            setTimeout(timeUpdater, 20000);
+        }
+        timeUpdater();
+
+        /*********** Floorplan Script ***********/
+
+        var FIRST_ROOM = "Bedroom", SECOND_ROOM = "Den", THIRD_ROOM = "Dining", FOURTH_ROOM = "Room4", FIFTH_ROOM = "Room5";
+        var colors = ["#d84315", "#f9a825", "#00695c", "#1565c0", "#6a1b9a"];
+        //var colors = ["#6a1b9a", "#0277bd", "#2e7d32", "#9e9d24", "#ff8f00"];
+        //var colors = ["#c2185b", "#1976d2", "#f57f17", "#009688", "#6a1b9a"];
+        $('.first-room.pulse-button, .first-room.duration-fill').css('background-color', colors[0]); $('.second-room.pulse-button, .second-room.duration-fill').css('background-color', colors[1]); $('.third-room.pulse-button, .third-room.duration-fill').css('background-color', colors[2]); $('.fourth-room.pulse-button, .fourth-room.duration-fill').css('background-color', colors[3]); $('.fifth-room.pulse-button, .fifth-room.duration-fill').css('background-color', colors[4]);
+        $('.first-room.circleLarge, .first-room.circleSmall, .first-room.duration-bar').css('border-color', colors[0]); $('.second-room.circleLarge, .second-room.circleSmall, .second-room.duration-bar').css('border-color', colors[1]); $('.third-room.circleLarge, .third-room.circleSmall, .third-room.duration-bar').css('border-color', colors[2]); $('.fourth-room.circleLarge, .fourth-room.circleSmall, .fourth-room.duration-bar').css('border-color', colors[3]); $('.fifth-room.circleLarge, .fifth-room.circleSmall, .fifth-room.duration-bar').css('border-color', colors[4]);
+
+        if (numOfFloors == 1) {
+            $('.second-floor').hide();
+            $('.first-floor').width("100%");
+            $('.soundlist-container').height("21%");
+            $('.floorwave-container').height("70%");
+
+            function changefloor(circleClas, waveClas) {
+                $(circleClas).css({ 'left': $(circleClas).position().left * 0.5, 'top': $(circleClas).position().top * 5 / 7 });
+                $(waveClas).css({ 'left': $(waveClas).position().left * 0.5, 'top': $(waveClas).position().top * 5 / 7, 'width': $(waveClas).width() * 0.5 });
+            }
+            changefloor(".first-room", ".svg-first-room"); changefloor(".second-room", ".svg-second-room"); changefloor(".third-room", ".svg-third-room"); changefloor(".fourth-room", ".svg-fourth-room"); changefloor(".fifth-room", ".svg-fifth-room");
+        }
+
+        if (numOfClients == 3) {
+            $('.fifth-room').hide(); $('.svg-fifth-room').hide();
+            $('.fourth-room').hide(); $('.svg-fourth-room').hide();
+        }
+        else if (numOfClients == 4) {
+            $('.fifth-room').hide(); $('.svg-fifth-room').hide();
+        }
+
+        const circleVis = val => Math.log(val + Math.E) * 40;			// Function used to generate circle and pulse visualization from data. Max is around ~100px.
+        const SecToPx = val => val <= 8 ? val * 10 : 80;	            // Function used to generation duration width 
+
+        /**** Data from Socket ****/
+        var socket = io.connect({ 'reconnection': true, 'timeout': 5 * 86400 * 1000 });					//URL is windows.location (url address of the webpage), timeout: 5 days
+
+        socket.on('responseFromHttpServer-floorplan-Pulse', function (data) {
+            data = JSON.parse(data);
+
+            //console.log("Floorplan Data:" + parseFloat(data.dataFromHttpServer) + " Room:" +  data.clientid + " Level:" + data.absLoudLevel);  
+            window.requestAnimationFrame(() => {
+                if (data.clientid == FIRST_ROOM) {
+                    pulseChanger('.pulse-button.first-room', parseFloat(data.dataFromHttpServer), parseFloat(data.pitchFromHttpServer), data.absLoudLevel, parseFloat(data.duration));
+                    durationChanger('.duration-fill.first-room', data.duration, data.absLoudLevel);
+                }
+                else if (data.clientid == SECOND_ROOM) {
+                    pulseChanger('.pulse-button.second-room', parseFloat(data.dataFromHttpServer), parseFloat(data.pitchFromHttpServer), data.absLoudLevel, parseFloat(data.duration));
+                    durationChanger('.duration-fill.second-room', data.duration, data.absLoudLevel);
+                }
+                else if (data.clientid == THIRD_ROOM) {
+                    pulseChanger('.pulse-button.third-room', parseFloat(data.dataFromHttpServer), parseFloat(data.pitchFromHttpServer), data.absLoudLevel, parseFloat(data.duration));
+                    durationChanger('.duration-fill.third-room', data.duration, data.absLoudLevel);
+                }
+                else if (data.clientid == FOURTH_ROOM) {
+                    pulseChanger('.pulse-button.fourth-room', parseFloat(data.dataFromHttpServer), parseFloat(data.pitchFromHttpServer), data.absLoudLevel, parseFloat(data.duration));
+                    durationChanger('.duration-fill.fourth-room', data.duration, data.absLoudLevel);
+                }
+                else if (data.clientid == FIFTH_ROOM) {
+                    pulseChanger('.pulse-button.fifth-room', parseFloat(data.dataFromHttpServer), parseFloat(data.pitchFromHttpServer), data.absLoudLevel, parseFloat(data.duration));
+                    durationChanger('.duration-fill.fifth-room', data.duration, data.absLoudLevel);
+                }
+            });
+        });
+
+        socket.on('responseFromHttpServer-floorplan-Circle', function (data) {
+            data = JSON.parse(data);
+
+            window.requestAnimationFrame(() => {
+                if (data.clientid == FIRST_ROOM) {
+                    circleChanger('.first-room', parseFloat(data.avgSmall), parseFloat(data.avgLarge));
+                }
+                else if (data.clientid == SECOND_ROOM) {
+                    circleChanger('.second-room', parseFloat(data.avgSmall), parseFloat(data.avgLarge));
+                }
+                else if (data.clientid == THIRD_ROOM) {
+                    circleChanger('.third-room', parseFloat(data.avgSmall), parseFloat(data.avgLarge));
+                }
+                else if (data.clientid == FOURTH_ROOM) {
+                    circleChanger('.fourth-room', parseFloat(data.avgSmall), parseFloat(data.avgLarge));
+                }
+                else if (data.clientid == FIFTH_ROOM) {
+                    circleChanger('.fifth-room', parseFloat(data.avgSmall), parseFloat(data.avgLarge));
+                }
+            });
+        });
+
+        function pulseChanger(clas, currentVal, pitch, loudLevel, duration) {
+            if (loudLevel == "Blank")
+                $(clas).css('opacity', '0');
+            else {
+                var rgb = ($(clas).css("background-color")).replace(/[^\d,]/g, '').split(',');
+                $(clas).css({
+                    'height': circleVis(currentVal), 'width': circleVis(currentVal),
+                    'margin-top': -circleVis(currentVal) / 2 - 2, 'margin-left': -circleVis(currentVal) / 2 - 2,
+                    'box-shadow': '0 0 10px ' + circleVis(currentVal) / 2 + 'px rgba(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ',0.2)'
+                });
+                $(clas).css('opacity', 0.7 + 0.3 * pitch / 5000);
+            }
+        }
+
+        function durationChanger(clas, duration, loudLevel) {
+            var seconds = parseInt(duration);
+            var hours = Math.floor(seconds / 3600);
+            seconds %= 3600;
+            var mins = Math.floor(seconds / 60);
+            seconds %= 60;
+
+            if (loudLevel == "Blank") {
+                $(clas).css('visibility', 'hidden');
+                //$(clas).css('width', '0px');
+            }
+            else {
+                $(clas).css('width', SecToPx(duration) + 'px');
+
+                if (hours > 0)
+                    $(clas).text(hours + 'h ' + mins + 'm ' + seconds + 's');
+                else if (mins > 0)
+                    $(clas).text(mins + 'm ' + seconds + 's');
+                else
+                    $(clas).text(seconds + 's');
+
+                $(clas).css('visibility', 'visible');
+            }
+        }
+
+        function circleChanger(clas, avgSmall, avgLarge) {
+            $('.circleSmall' + clas).css({
+                'height': circleVis(avgSmall), 'width': circleVis(avgSmall),
+                'margin-top': -circleVis(avgSmall) / 2 - 2, 'margin-left': -circleVis(avgSmall) / 2 - 2
+            });
+            $('.circleLarge' + clas).css({
+                'height': circleVis(avgLarge), 'width': circleVis(avgLarge),
+                'margin-top': -circleVis(avgLarge) / 2 - 2, 'margin-left': -circleVis(avgLarge) / 2 - 2
+            });
+        }
+
+        /*********** Waveform Script ***********/
+
+    	/* Performance is increased by reducing the number of data points or by reducing data updatae time.
+		 * If you reduce the number of data points, the granurality is lower and hence you can use the functions below (divide by 2 etc.) to make it all look better.
+		 * Another trick (not recommended) is to increase the data updatae time while also increasing the points (coz generating 512 point time is not double of 256 point time)
+		 * This way the eye wouldn't see big lines moving too fast....
+		 */
+
+        /** Set during handshake */
+        $('.svg-first-room').css('fill', colors[0]); $('.svg-second-room').css('fill', colors[1]); $('.svg-third-room').css('fill', colors[2]); $('.svg-fourth-room').css('fill', colors[3]); $('.svg-fifth-room').css('fill', colors[4]);
+
+        var numOfPoints = 512;				// Number of points  = 256. Orig = 1024 (which increases granurality but decreases performance and also decreases speed of updatae of waveform)			
+        var min_max_val = 6;	//7.5		// IMP: CHANGE BASED ON MIC VOLUME AND HOW IT LOOKS. Remeber that graph doesn't show all value.
+        var max_val = min_max_val;
+        var data1 = [0.0, 0.0], data2 = [0.0, 0.0], data3 = [0.0, 0.0], data4 = [0.0, 0.0], data5 = [0.0, 0.0];
+
+        //d3version5 specific elements
+        var width1 = $('.svg-first-room').width();
+        var width2 = $('.svg-second-room').width();
+        var width3 = $('.svg-third-room').width();
+        var width4 = $('.svg-fourth-room').width();
+        var width5 = $('.svg-fifth-room').width();
+        var height_wave = $('.waveform > div').height();
+
+        //Sound event specific elements
+        var secToPerWidth = sec => sec * 100 / parseFloat($('.marquee').css('animationDuration'));		//This does not account for width of marquee element. TODO: Also, set the marquee element width based on server handshake (data sample size)
+        var lengthOfGapInSec = 1;
+        var numOfSamplesPerSec = 20;
+        var firstTime = 1;
+
+        /**** data from Socket ****/
+        socket.on('handshake-server-wave', function (data) {
+            data = JSON.parse(data);
+            if (firstTime) {
+                lengthOfGapInSec = parseFloat(data.lengthOfGapInSec);
+                numOfSamplesPerSec = parseFloat(data.numOfSamplesPerSec);
+                numOfPoints = parseInt(data.numOfWaveformPoints);
+
+                var wave1 = [...Array(numOfPoints)].map(e => Array(2).fill(0.0)),
+                    wave2 = [...Array(numOfPoints)].map(e => Array(2).fill(0.0)),
+                    wave3 = [...Array(numOfPoints)].map(e => Array(2).fill(0.0)),
+                    wave4 = [...Array(numOfPoints)].map(e => Array(2).fill(0.0)),
+                    wave5 = [...Array(numOfPoints)].map(e => Array(2).fill(0.0));
+
+                //waveformArray = clientid, data.dataFromDataClient, data.pitchFromDataClient
+                for (var i = 0; i < (data.waveformArray).length; i++) {
+                    if (data.waveformArray[i][0] == FIRST_ROOM) {
+                        wave1.shift();
+                        wave1.push([parseFloat(data.waveformArray[i][1]), parseFloat(data.waveformArray[i][2])]);
+                    }
+                    else if (data.waveformArray[i][0] == SECOND_ROOM) {
+                        wave2.shift();
+                        wave2.push([parseFloat(data.waveformArray[i][1]), parseFloat(data.waveformArray[i][2])]);
+                    }
+                    else if (data.waveformArray[i][0] == THIRD_ROOM) {
+                        wave3.shift();
+                        wave3.push([parseFloat(data.waveformArray[i][1]), parseFloat(data.waveformArray[i][2])]);
+                    }
+                    else if (data.waveformArray[i][0] == FOURTH_ROOM) {
+                        wave4.shift();
+                        wave4.push([parseFloat(data.waveformArray[i][1]), parseFloat(data.waveformArray[i][2])]);
+                    }
+                    else if (data.waveformArray[i][0] == FIFTH_ROOM) {
+                        wave5.shift();
+                        wave5.push([parseFloat(data.waveformArray[i][1]), parseFloat(data.waveformArray[i][2])]);
+                    }
+                }
+                svg_creater(wave1, '.svg-first-room', min_max_val, width1);
+                svg_creater(wave2, '.svg-second-room', min_max_val, width2);
+                svg_creater(wave3, '.svg-third-room', min_max_val, width3);
+                svg_creater(wave4, '.svg-fourth-room', min_max_val, width4);
+                svg_creater(wave5, '.svg-fifth-room', min_max_val, width5);
+
+                firstTime = 0;
+
+                setInterval(() => {
+                    if (socket.connected)
+                        window.requestAnimationFrame(() => {
+                            svg_updater(data1, ".svg-first-room", min_max_val, width1);
+                        });
+                }, 50);
+
+                setInterval(() => {
+                    if (socket.connected)
+                        window.requestAnimationFrame(() => {
+                            svg_updater(data2, ".svg-second-room", min_max_val, width2);
+                        });
+                }, 50);
+
+                setInterval(() => {
+                    if (socket.connected)
+                        window.requestAnimationFrame(() => {
+                            svg_updater(data3, ".svg-third-room", min_max_val, width3);
+                        });
+                }, 50);
+
+                setInterval(() => {
+                    if (socket.connected)
+                        window.requestAnimationFrame(() => {
+                            svg_updater(data4, ".svg-fourth-room", min_max_val, width4);
+                        });
+                }, 50);
+
+                setInterval(() => {
+                    if (socket.connected)
+                        window.requestAnimationFrame(() => {
+                            svg_updater(data5, ".svg-fifth-room", min_max_val, width5);
+                        });
+                }, 50);
+            }
+        });
+
+        socket.on('responseFromHttpServer-waveform', function (data) {
+            data = JSON.parse(data);
+
+            if (data.clientid == FIRST_ROOM) {
+
+                data1 = [parseFloat(data.dataFromHttpServer), parseFloat(data.pitchFromHttpServer)];
+                //window.requestIdleCallback(() => {
+                //    $('.svg-first-room h1').css('visibility', 'hidden');
+                //});
+                //if (data.event != "Blank")
+                //	event_adder(".svg-first-room", data.event, parseFloat(data.duration), lengthOfGapInSec);
+            }
+
+            if (data.clientid == SECOND_ROOM) {
+                data2 = [parseFloat(data.dataFromHttpServer), parseFloat(data.pitchFromHttpServer)];
+                //window.requestIdleCallback(() => {
+                //    $('.svg-second-room h1').css('visibility', 'hidden');
+                //});
+                //if (data.event != "Blank")
+                //    event_adder(".svg-second-room", data.event, parseFloat(data.duration), lengthOfGapInSec);
+            }
+
+            if (data.clientid == THIRD_ROOM) {
+                data3 = [parseFloat(data.dataFromHttpServer), parseFloat(data.pitchFromHttpServer)];
+                //window.requestIdleCallback(() => {
+                //    $('.svg-third-room h1').css('visibility', 'hidden');
+                //});
+                //if (data.event != "Blank")
+                //    event_adder(".svg-third-room", data.event, parseFloat(data.duration), lengthOfGapInSec);
+            }
+
+            if (data.clientid == FOURTH_ROOM) {
+                data4 = [parseFloat(data.dataFromHttpServer), parseFloat(data.pitchFromHttpServer)];
+                //window.requestIdleCallback(() => {
+                //    $('.svg-fourth-room h1').css('visibility', 'hidden');
+                //});
+                //if (data.event != "Blank")
+                //    event_adder(".svg-fourth-room", data.event, parseFloat(data.duration), lengthOfGapInSec);
+            }
+
+            if (data.clientid == FIFTH_ROOM) {
+                data5 = [parseFloat(data.dataFromHttpServer), parseFloat(data.pitchFromHttpServer)];
+                //window.requestIdleCallback(() => {
+                //    $('.svg-fifth-room h1').css('visibility', 'hidden');
+                //});
+                //if (data.event != "Blank")
+                //    event_adder(".svg-fifth-room", data.event, parseFloat(data.duration), lengthOfGapInSec);
+            }
+
+        });
+        //event_adder(".svg-second-room", "Loud", 0.75, 1);
+        /**** Events *****/
+        function event_adder(clas, event, duration, gapLen) {
+            var id = new Date().getTime();
+
+            $(clas).append("<span class='marquee " + id + "'>" + event + ", " + duration + "s</span>");
+
+            var time_adjust = parseFloat($('.marquee').css('animationDuration')) / (numOfPoints / numOfSamplesPerSec);
+            var animationDuration = parseFloat($('.marquee').css('animationDuration')) - (duration + gapLen) * time_adjust;
+            $('.' + id).css({ 'animationDuration': animationDuration + 's' });
+
+            var tra = -secToPerWidth(duration + gapLen);
+            $('.' + id).css({ 'transform': 'translateX(' + tra + '%)' });
+
+            setTimeout(function () {
+                $('.' + id).remove();
+            }, animationDuration * 1000);
+        }
+
+        /**** Waveform *****/
+
+        var y_wave = d3version5.scaleLinear().range([height_wave, -height_wave]);
+        y_wave.domain([-max_val, max_val]);
+
+        function svg_creater(data, svg, max_val, width) {
+
+            var chart = d3version5.select(svg).append("svg")
+                .attr("class", "chart")
+                .attr("width", width)
+                .attr("height", height_wave);
+
+            var grp = chart.append("g")
+                .attr("transform", "translate(0,0)");
+
+            grp.selectAll("rect")
+                .data(data)
+                .enter().append("rect")
+                .attr("transform", function (d, i) {
+                    return "translate(" + i * width / numOfPoints + ",0)";
+                })
+                .attr("y", function (d) {
+                    return height_wave - Math.abs(y_wave(d[0]) / 2) - height_wave / 2 + 2;
+                })
+                .attr("height", function (d) {
+                    return Math.abs(y_wave(d[0]));
+                })
+                .attr("width", width / numOfPoints)
+                .attr("opacity", function (d) {
+                    return 0.7 + 0.3 * d[1] / 5000;
+                });
+        }
+
+        function svg_updater(data, svg, max_val, width) {
+
+            var chart = d3version5.select(svg).select("svg");
+            var grp = chart.select("g");
+            var grpTransform = grp.attr("transform");
+            var xCoor = (grpTransform.substring(grpTransform.indexOf("(") + 1, grpTransform.indexOf(")")).split(",")[0]) - width / numOfPoints;
+
+            grp.insert("rect")
+                .attr("transform", function (d, i) {
+                    return "translate(" + (width - xCoor) + ",0)";
+                })
+                .attr("y", height_wave - Math.abs(y_wave(data[0]) / 2) - height_wave / 2 + 2)
+                .attr("height", Math.abs(y_wave(data[0])))
+                .attr("width", width / numOfPoints)
+                .attr("opacity", 0.7 + 0.3 * data[1] / 5000);
+
+            grp.attr("transform", "translate(" + xCoor + ",0)");
+
+            grp.select("rect")
+                .remove();
+        }
+
+
+        /*********** Soundlist Script ***********/
+
+        /* Socket variables */
+        const heightGen = val => Math.log(val + Math.E) * 12 * (4 / numOfClients) * numOfFloors;      //Generate height based on loudness.
+
+        /* Chart variables */
+        var version = "0.1.0",
+            datum, data,
+            maxSeconds = 300,
+            svgWidth = $('.soundlist-container').width() * 97.3 / 100, svgHeight = $('.soundlist-container').height() * 97.3 / 100,
+            margin = { top: -3, bottom: 38, left: 110, right: 5 },
+            dimension = { xAxis: 20, yAxis: 20, },
+            maxY = 100, minY = 0,
+            drawXAxis = true, drawYAxis = true,
+            xAxisDim = !drawXAxis ? 0 : dimension.xAxis,
+            border = false,
+            selection,
+            barId = 0,
+            yDomain = [FIRST_ROOM],
+            barWidth = 5,
+            x, y, xNav,
+            width = svgWidth - margin.left - margin.right,
+            height = svgHeight - margin.top - margin.bottom - xAxisDim + 30,
+            xAxisG, yAxisG,
+            xAxis, yAxis,
+            svg,
+            pixelsPerSecond = width / maxSeconds,
+            chart, chartDiv, refresh;
+
+
+        socket.on('handshake-server-list', function (data) {
+            $('#viewDiv').empty();
+            data = JSON.parse(data);
+
+            chart = realTimeChartMulti()
+                .maxSeconds(parseInt(data.historyLenInSec));
+
+            // invoke the chart
+            chartDiv = d3version3.select("#viewDiv").append("div")
+                .attr("id", "chartDiv")
+                .call(chart);
+
+            if (numOfClients == 3)
+                chart.yDomain([THIRD_ROOM, SECOND_ROOM, FIRST_ROOM]);
+            else if (numOfClients == 4)
+                chart.yDomain([FOURTH_ROOM, THIRD_ROOM, SECOND_ROOM, FIRST_ROOM]);
+            else
+                chart.yDomain([FIFTH_ROOM, FOURTH_ROOM, THIRD_ROOM, SECOND_ROOM, FIRST_ROOM]);
+
+
+            //list array: data.clientid, eventTimeStamp, duration, eventPeak, eventFreq
+            for (var i = data.listArraylen; i < (data.listArray).length; i++) {
+
+                if ((numOfClients == 3 && (data.listArray[i][0] == FIRST_ROOM || data.listArray[i][0] == SECOND_ROOM || data.listArray[i][0] == THIRD_ROOM))
+                    || (numOfClients == 4 && (data.listArray[i][0] == FIRST_ROOM || data.listArray[i][0] == SECOND_ROOM || data.listArray[i][0] == THIRD_ROOM || data.listArray[i][0] == FOURTH_ROOM))
+                    || (numOfClients == 5 && (data.listArray[i][0] == FIRST_ROOM || data.listArray[i][0] == SECOND_ROOM || data.listArray[i][0] == THIRD_ROOM || data.listArray[i][0] == FOURTH_ROOM || data.listArray[i][0] == FIFTH_ROOM))) {
+
+                    var obj = {
+                        // complex data item; four attributes (type, color, opacity and size) are changing dynamically with each iteration (as an example)
+                        time: parseInt(data.listArray[i][1]),
+                        color: colorGenerator(data.listArray[i][0][0]),
+                        opacity: 0.8 + 0.2 * parseFloat(data.listArray[i][4]) / 5000, //max opacity: 0.5 for events to overlap...
+                        category: data.listArray[i][0],
+                        type: "rect",
+                        height: heightGen(parseFloat(data.listArray[i][3])),
+                        width: parseFloat(data.listArray[i][2]) * pixelsPerSecond
+                    };
+                    chart.datum(obj);
+                }
+            }
+
+            refresh();
+        });
+
+        socket.on('responseFromHttpServer-soundlist', function (data) {
+            data = JSON.parse(data);
+
+            if ((numOfClients == 3 && (data.clientid == FIRST_ROOM || data.clientid == SECOND_ROOM || data.clientid == THIRD_ROOM))
+                || (numOfClients == 4 && (data.clientid == FIRST_ROOM || data.clientid == SECOND_ROOM || data.clientid == THIRD_ROOM || data.clientid == FOURTH_ROOM))
+                || (numOfClients == 5 && (data.clientid == FIRST_ROOM || data.clientid == SECOND_ROOM || data.clientid == THIRD_ROOM || data.clientid == FOURTH_ROOM || data.clientid == FIFTH_ROOM))) {
+
+                var obj = {
+                    // complex data item; four attributes (type, color, opacity and size) are changing dynamically with each iteration (as an example)
+                    time: parseInt(data.eventTimeStamp),
+                    color: colorGenerator(data.clientid[0]),
+                    opacity: 0.7 + 0.3 * parseFloat(data.peakFrequency) / 5000, //max opacity: 0.5 for events to overlap...
+                    category: data.clientid,
+                    type: "rect",
+                    height: heightGen(parseFloat(data.peakLoudness)),
+                    width: parseFloat(data.duration) * pixelsPerSecond
+                };
+                chart.datum(obj);       //inexpensive operation, just adding data to an array.
+            }
+        });
+
+        /***** Chart Creation *****/
+
+        function colorGenerator(clientid) {
+            switch (clientid) {
+                case FIRST_ROOM: return colors[0];
+                case SECOND_ROOM: return colors[1];
+                case THIRD_ROOM: return colors[2];
+                case FOURTH_ROOM: return colors[3];
+                case FIFTH_ROOM: return colors[4];
+            }
+            return colors[0];
+        }
+
+        function realTimeChartMulti() {
+
+            // create the chart
+            var chart = function (s) {
+                selection = s;
+                if (selection == undefined) {
+                    console.error("selection is undefined");
+                    return;
+                };
+
+                // compute initial time domains...
+                var ts = new Date().getTime();
+
+                // first, the full time domain (max currently viewable time domain)
+                var endTime = new Date(ts);
+                var startTime = new Date(endTime.getTime() - maxSeconds * 1000);
+
+                // append the svg
+                svg = selection.append("svg")
+                    .attr("width", svgWidth)
+                    .attr("height", svgHeight)
+                    .style("border", function (d) {
+                        if (border) return "3px solid #cdcdcd";
+                        else return null;
+                    });
+
+                // create main group and translate
+                var main = svg.append("g")
+                    .attr("transform", "translate (" + margin.left + "," + margin.top + ")");
+
+                // define clip-path
+                main.append("defs").append("clipPath")
+                    .attr("id", "myClip")
+                    .append("rect")
+                    .attr("x", 0)
+                    .attr("y", 0)
+                    .attr("width", width)
+                    .attr("height", height);
+
+                // create chart background
+                main.append("rect")
+                    .attr("x", 0)
+                    .attr("y", 0)
+                    .attr("width", width)
+                    .attr("height", height)
+                    .style("fill", "#ffffff");
+
+                // note that two groups are created here, the latter assigned to barG;
+                // the former will contain a clip path to constrain objects to the chart area; 
+                // no equivalent clip path is created for the nav chart as the data itself
+                // is clipped to the full time domain
+                var barG = main.append("g")
+                    .attr("class", "barGroup")
+                    .attr("transform", "translate(0, 0)")
+                    .attr("clip-path", "url(#myClip")
+                    .append("g");
+
+                // add group for x axis
+                xAxisG = main.append("g")
+                    .attr("class", "x axis")
+                    .attr("transform", "translate(0," + height + ")");
+
+                // add group for y axis
+                yAxisG = main.append("g")                 //Group containing the axis and other things like "title" if needed
+                    .attr("class", "y axis");
+
+                // define main chart scales
+                x = d3version3.time.scale().range([0, width]);    // The time axis for interal maintenance
+                y = d3version3.scale.ordinal().domain(yDomain).rangeRoundPoints([height, 0], 1);
+
+                // define main chart axis
+                //xAxis = d3version3.svg.axis().tickSize(-(height)).orient("bottom");   //  What the user sees
+                xAxis = d3version3.svg.axis().orient("bottom");
+                yAxis = d3version3.svg.axis().tickSize(-(width)).orient("left");
+
+                // set the scale domains for main and nav axis
+                x.domain([startTime, endTime]);
+                xAxis.scale(x)(xAxisG);
+
+                data = [];
+
+                // function to refresh the viz upon changes of the time domain 
+                // (which happens constantly), or after arrival of new data, or at init
+                refresh = function () {
+
+                    // process data to remove too late data items 
+                    data = data.filter(function (d) {
+                        if (d.time > startTime.getTime()) return true;
+                    })
+
+                    var updateSel = barG.selectAll(".bar")
+                        .data(data);
+
+                    // remove items
+                    updateSel.exit().remove();
+
+                    // add items
+                    updateSel.enter()
+                        .append(function (d) {
+                            if (d.type == undefined) console.error(JSON.stringify(d))
+                            var type = 'rect';
+                            var node = document.createElementNS("http://www.w3.org/2000/svg", type);
+                            return node;
+                        })
+                        .attr("class", "bar")
+                        .attr("id", function () {
+                            return "bar-" + barId++;
+                        });
+
+                    // update items; added items are now part of the update selection
+                    updateSel
+                        .attr("x", function (d) { return x(d.time); })
+                        .attr("y", function (d) { return y(d.category) - d.height / 2; })
+                        .attr("width", function (d) { return d.width*2; })
+                        .attr("height", function (d) { return d.height; })
+                        .attr("rx", 2)
+                        .attr("ry", 2)
+                        .style("fill", function (d) { return d.color || "black"; })
+                        //.style("stroke", "orange")
+                        //.style("stroke-width", "1px")
+                        //.style("stroke-opacity", 0.8)
+                        .style("fill-opacity", function (d) { return d.opacity || 1; });
+
+                } // end refreshChart function
+
+                // initial invocation; update display 
+                refresh();
+
+                /** Not checked but maybe this function can be used to create interactions with individual objects -- ToDo **/
+                function getTagName(that) {
+                    var tagName = d3version3.select(that).node().tagName;
+                    return (tagName);
+                }
+                // function to keep the chart "moving" through time (right to left) 
+                setInterval(function () {
+
+                    // compute new nav extents
+                    endTime = new Date();
+                    startTime = new Date(endTime.getTime() - maxSeconds * 1000);
+
+                    // update scales
+                    x.domain([startTime, endTime]);     //Internal time axis
+
+                    // update axis
+                    xAxis.scale(x)(xAxisG);             // What the user sees
+
+                    // refresh svg
+                    window.requestIdleCallback(() => {
+                        refresh();
+                    });
+                }, 10000)
+
+                return chart;
+
+            } // end chart function
+
+
+            // chart getters/setters
+
+            // new data item (this most recent item will appear 
+            // on the right side of the chart, and begin moving left)
+            chart.datum = function (_) {
+                if (arguments.length == 0) return datum;
+                datum = _;
+                data.push(datum);
+                return chart;
+            }
+
+            // yItems (can be dynamically added after chart construction)
+            chart.yDomain = function (_) {
+                if (arguments.length == 0) return yDomain;
+                yDomain = _;
+                if (svg) {
+                    // update the y ordinal scale
+                    y = d3version3.scale.ordinal().domain(yDomain).rangeRoundPoints([height, 0], 1);
+                    // update the y axis
+                    yAxis.scale(y)(yAxisG);
+                }
+                return chart;
+            }
+
+            // Time length of display
+            chart.maxSeconds = function (_) {
+                if (arguments.length == 0) return maxSeconds; //default max seconds
+                maxSeconds = _;
+                pixelsPerSecond = width / maxSeconds;
+                return chart;
+            }
+
+            // version
+            chart.version = version;
+
+            return chart;
+
+        } // end realTimeChart function
+
+
+
+
+
+        /******** Common to All Script *********/
+
+        // Send handshake
+        socket.on('connect', function () {
+            //socket.receiveBuffer = [];			//Clear buffer
+            console.log("Connected to server!");
+            socket.emit('handshake', 'http-client');
+        });
+
+        socket.on('goodbye-server', function (clientid) {
+            //Waveform
+            if (clientid == FIRST_ROOM) {
+                data1 = [0.0, 0.0];
+                //$('.svg-first-room h1').css('visibility', 'visible');
+            }
+            else if (clientid == SECOND_ROOM) {
+                data2 = [0.0, 0.0];
+                //$('.svg-second-room h1').css('visibility', 'visible');
+            }
+            else if (clientid == THIRD_ROOM) {
+                data3 = [0.0, 0.0];
+                //$('.svg-third-room h1').css('visibility', 'visible');
+            }
+            else if (clientid == FOURTH_ROOM) {
+                data4 = [0.0, 0.0];
+                //$('.svg-fourth-room h1').css('visibility', 'visible');
+            }
+            else if (clientid == FIFTH_ROOM) {
+                data5 = [0.0, 0.0];
+                //$('.svg-fifth-room h1').css('visibility', 'visible');
+            }
+
+            //Floorplan
+            if (clientid == FIRST_ROOM) {
+                pulseChanger('.pulse-button.first-room', 0.0, 0.0, "Blank", 0.0);
+                durationChanger('.duration-fill.first-room', 0.0, "Blank");
+            }
+            else if (clientid == SECOND_ROOM) {
+                pulseChanger('.pulse-button.second-room', 0.0, 0.0, "Blank", 0.0);
+                durationChanger('.duration-fill.second-room', 0.0, "Blank");
+            }
+            else if (clientid == THIRD_ROOM) {
+                pulseChanger('.pulse-button.third-room', 0.0, 0.0, "Blank", 0.0);
+                durationChanger('.duration-fill.third-room', 0.0, "Blank");
+            }
+            else if (clientid == FOURTH_ROOM) {
+                pulseChanger('.pulse-button.fourth-room', 0.0, 0.0, "Blank", 0.0);
+                durationChanger('.duration-fill.fourth-room', 0.0, "Blank");
+            }
+            else if (clientid == FIFTH_ROOM) {
+                pulseChanger('.pulse-button.fifth-room', 0.0, 0.0, "Blank", 0.0);
+                durationChanger('.duration-fill.fifth-room', 0.0, "Blank");
+            }
+        });
+
+
+        /** Error Handling. See: https://socket.io/docs/client-api/ **/
+        socket.on('powerStatus', function (data) {
+            data = JSON.parse(data);
+            if (parseInt(data.powerLineConnected))
+                window.requestIdleCallback(() => {
+                    $('h5').hide();
+                });
+            else {
+                $('h5').text("Your " + data.clientid + " tablet's power cable is disconnected. Please check.");
+                $('h5').show();
+            }
+        });
+
+        socket.on('connect_error', function () { console.log("connect_error or connect_timeout"); });
+
+        socket.on('disconnect', function () {
+
+            //Floorplan
+            console.log("Disconnected");
+            pulseChanger('.pulse-button.first-room', 0.0, 0.0, "Blank", 0.0);
+            durationChanger('.duration-fill.first-room', 0.0, "Blank");
+            pulseChanger('.pulse-button.second-room', 0.0, 0.0, "Blank", 0.0);
+            durationChanger('.duration-fill.second-room', 0.0, "Blank");
+            pulseChanger('.pulse-button.third-room', 0.0, 0.0, "Blank", 0.0);
+            durationChanger('.duration-fill.third-room', 0.0, "Blank");
+            pulseChanger('.pulse-button.fourth-room', 0.0, 0.0, "Blank", 0.0);
+            durationChanger('.duration-fill.fourth-room', 0.0, "Blank");
+            pulseChanger('.pulse-button.fifth-room', 0.0, 0.0, "Blank", 0.0);
+            durationChanger('.duration-fill.fifth-room', 0.0, "Blank");
+
+            //Waveform
+            //$('.svg-first-room h1').css('visibility', 'visible');
+            //$('.svg-second-room h1').css('visibility', 'visible');
+            //$('.svg-third-room h1').css('visibility', 'visible');
+            //$('.svg-fourth-room h1').css('visibility', 'visible');
+            //$('.svg-fifth-room h1').css('visibility', 'visible');
+        });
+
+        socket.on('reload', function () {
+            document.location.reload(true);
+        });
+
+
+        /*** Bookmark Script ***/
+        //$('.bookmark-container').hide(); $('h3').hide();
+        var touchLock = false;
+        var screenshot = "";
+
+        $('.bookmark-button').click(function () {
+            if (!touchLock) {
+                touchLock = true;
+                screenshot = document.documentElement.innerHTML;
+
+                $('.bookmark-button').css({ 'font-weight': 'bold', 'border': '2px solid #fff', "box-shadow": "0 2px 10px 2px rgba(0, 0, 0, 0.1), 0 2px 10px 2px rgba(0, 0, 0, 0.1), 0 2px 10px 2px rgba(0, 0, 0, 0.1), 0 2px 10px 2px rgba(0, 0, 0, 0.1)" });
+
+                $('#input0').val("");
+                $('#input1').val("");
+                $('#input2').val("");
+                $('.bookmark-container').fadeIn(400);
+            }
+        });
+
+        function returnScreenShot() {return screenshot;}
+
+        $(':button[type="submit"]').click(function () {
+			var participantId = $('#input0').val();
+            var otherText = $('#input1').val();
+            var commentText = $('#input2').val();
+            var selectedRadio = $("input[type='radio'][name='radio_button']:checked").val();
+            socket.emit('bookmark', JSON.stringify({ screenshot: returnScreenShot(), selectedRadio: selectedRadio, participant: participantId, otherText: otherText, commentText: commentText }));
+            $('.bookmark-container').fadeOut(400); $('h3').show();
+            $('.bookmark-button').css({ 'font-weight': 'normal', 'border': '2px solid #777', "box-shadow": "none" });
+
+            setTimeout(function () {
+                $('h3').fadeOut(400);
+            }, 2000);
+            touchLock = false;
+        });
+
+        $(':button[type="cancel"]').click(function () {
+            $('.bookmark-container').fadeOut(400);
+            $('.bookmark-button').css({ 'font-weight': 'normal', 'border': '2px solid #777', "box-shadow": "none" });
+            touchLock = false;
+        });
+
+        var selectedInput;
+        let Keyboard = window.SimpleKeyboard.default;
+
+        let myKeyboard = new Keyboard({
+            onChange: input => onChange(input),
+            onKeyPress: button => onKeyPress(button),
+            theme: "hg-theme-default",
+            layout: {
+                default: [
+                    "q w e r t y u i o p {bksp}",
+                    "a s d f g h j k l {enter}",
+                    "{shift} z x c v b n m , . {shift}",
+                    "{alt} {space} {altright}"
+                ],
+                shift: [
+                    "Q W E R T Y U I O P {bksp}",
+                    "A S D F G H J K L {enter}",
+                    "{shiftactivated} Z X C V B N M , . {shiftactivated}",
+                    "{alt} {space} {altright}"
+                ],
+                alt: [
+                    "1 2 3 4 5 6 7 8 9 0 {bksp}",
+                    `@ # $ & * ( ) ' " {enter}`,
+                    "{shift} % - + = / ; : ! ? {shift}",
+                    "{default} {space} {back}"
+                ]
+            },
+            display: {
+                "{alt}": ".?123",
+                "{shift}": "⇧",
+                "{shiftactivated}": "⇧",
+                "{enter}": "return",
+                "{bksp}": "⌫",
+                "{altright}": ".?123",
+                "{space}": " ",
+                "{default}": "ABC",
+                "{back}": "⇦"
+            }
+        });
+
+        document.querySelectorAll('.form-control')
+            .forEach(input => input.addEventListener('focus', onInputFocus));
+
+        function onInputFocus(event) {
+            // Setting input as selected
+            selectedInput = `#${event.target.id}`;
+
+            // Set the inputName option on the fly !
+            myKeyboard.setOptions({
+                inputName: event.target.id
+            });
+        }
+
+        function onChange(input) {
+            // If the input is not defined, grabbing the first ".form-control".
+            let currentInput = selectedInput || ".form-control";
+
+            // Updating the selected input's value
+            document.querySelector(currentInput).value = input;
+            $(selectedInput).focus();
+        }
+
+        function onKeyPress(button) {
+            if (button.includes("{") && button.includes("}")) {
+                handleLayoutChange(button);
+            }
+        }
+
+        function handleLayoutChange(button) {
+            let currentLayout = myKeyboard.options.layoutName;
+            let layoutName;
+
+            switch (button) {
+                case "{shift}":
+                case "{shiftactivated}":
+                case "{default}":
+                    layoutName = currentLayout === "default" ? "shift" : "default";
+                    break;
+
+                case "{alt}":
+                case "{altright}":
+                    layoutName = currentLayout === "alt" ? "default" : "alt";
+                    break;
+
+                default:
+                    break;
+            }
+
+            if (layoutName) {
+                myKeyboard.setOptions({
+                    layoutName: layoutName
+                });
+            }
+        }
+
+        $(".simple-keyboard").hide();
+        $(window).on('click', () => { $(".simple-keyboard").hide(); });
+        $(".form-control, .simple-keyboard").on('click', (event) => { event.stopPropagation(); $(".simple-keyboard").show(); });
+
+    </script>
+</body>
+
+</html>

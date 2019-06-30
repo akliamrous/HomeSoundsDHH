@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+  <head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="shortcut icon" type="image/png" href="https://cdns.iconmonstr.com/wp-content/assets/preview/2012/240/iconmonstr-sound-wave-4.png"/>  
+    <title>Home Layout View - Home Sounds</title>
+    <style>
+	  body, html {
+		  font: 24px Helvetica, Arial;
+		  height: 100%;
+		  width: 100%;
+		  background-image: url('./map.jpg');
+		  background-repeat: no-repeat;
+		  background-size: 100%;
+		  background-attachment: fixed;
+		}
+
+		.container {
+		  width: 200px;
+		  height: 100%;
+		  width: 100%;
+		  margin: 0 auto 0;
+		  -webkit-perspective: 1000;
+		  -webkit-backface-visibility: hidden;
+		}
+
+		.pulse-button {
+		  position: relative;
+		  top: 35%;
+		  left: 68%;
+		  #margin-left: -50px;
+		  #margin-top: -50px;
+		  display: block;
+		  width: 100px;
+		  height: 100px;
+		  font-size: 18px;
+		  font-weight: light;
+		  #font-family: 'Trebuchet MS', sans-serif;
+		  #text-transform: uppercase;
+		  text-align: center;
+		  line-height: 15.5px;
+		  letter-spacing: 0px;
+		  color: white;
+		  border: none;
+		  border-radius: 50%;
+		  background: #5a99d4;
+		  cursor: pointer;
+		  box-shadow: 0 0 0 0 rgba(90, 153, 212, 0.5);
+		  -webkit-animation: pulse 0.75s infinite;
+		}
+
+		.pulse-button:hover {
+		  -webkit-animation: none;
+		}
+
+		@-webkit-keyframes pulse {
+		  0% {
+			-moz-transform: scale(0.9);
+			-ms-transform: scale(0.9);
+			-webkit-transform: scale(0.9);
+			transform: scale(0.9);
+		  }
+		  70% {
+			-moz-transform: scale(1);
+			-ms-transform: scale(1);
+			-webkit-transform: scale(1);
+			transform: scale(1);
+			box-shadow: 0 0 0 50px rgba(90, 153, 212, 0);
+		  }
+		  100% {
+			-moz-transform: scale(0.9);
+			-ms-transform: scale(0.9);
+			-webkit-transform: scale(0.9);
+			transform: scale(0.9);
+			box-shadow: 0 0 0 0 rgba(90, 153, 212, 0);
+		  }
+		}
+		</style>
+  </head>
+  <body>
+    
+	<div class='container'>	
+		<span class="pulse-button"><br/><br/><br/>Liquid pour</span>
+	</div>
+    
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+   
+    <script>
+      $(function () {
+        var socket = io();
+        socket.on('sound message', function(msg){ 
+		  
+		  $('.container').append('<span class="pulse-button"></span>');
+	      $('.pulse-button').append('<br/><br/><br/>'+msg.sound);
+	      
+	      if(msg.location == 'Lounge' || msg.location == 'lounge') {
+			$('.pulse-button').css('top', '40%');
+			$('.pulse-button').css('left', '30%');	
+		  }
+		  else if(msg.location == 'Kitchen' || msg.location == 'kitchen') {
+			$('.pulse-button').css('top', '66%');
+			$('.pulse-button').css('left','66%');
+		  }
+		  else if(msg.location == 'Dining' || msg.location == 'dining') {
+			$('.pulse-button').css('top', '35%');
+			$('.pulse-button').css('left','68%');
+		  }	
+		  else if(msg.location == 'Bathroom' || msg.location == 'bathroom') {
+			$('.pulse-button').css('top', '3%');
+			$('.pulse-button').css('left','62.5%');
+		  }	
+		  else if(msg.location == 'Outside' || msg.location == 'outside') {
+			$('.pulse-button').css('top', '40%');
+			$('.pulse-button').css('left','90.5%');
+		  }
+		  setTimeout(function() {
+		    $('.container').text('');
+		  }, 3000); 
+        });        	
+      });
+      
+    </script>
+  </body>
+</html>

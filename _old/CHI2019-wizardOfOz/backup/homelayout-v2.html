@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+  <head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="shortcut icon" type="image/png" href="https://cdns.iconmonstr.com/wp-content/assets/preview/2012/240/iconmonstr-sound-wave-4.png"/>  
+    <title>Home Layout View - Home Sounds</title>
+    <style>
+		body, html {
+		  font: 18px Helvetica, Arial;
+		  height: 100%;
+		  width: 100%;
+		  background-image: url('./map.jpg');
+		  background-repeat: no-repeat;
+		  background-size: 100%;
+		  background-attachment: fixed;
+		}
+	 
+		.container {
+		  width: 200px;
+		  height: 100%;
+		  width: 100%;
+		  margin: 0 auto 0;
+		  -webkit-perspective: 1000;
+		  -webkit-backface-visibility: hidden;
+		}
+
+		.pulse-button {
+		  position: relative;
+		  top: 50%;
+		  left: 50%;
+		  #margin-left: -50px;
+		  #margin-top: -50px;
+		  display: block;
+		  width: 100px;
+		  height: 100px;
+		  font-size: 20px;
+		  font-weight: light;
+		  #font-family: 'Trebuchet MS', sans-serif;
+		  #text-transform: uppercase;
+		  text-align: center;
+		  line-height: 100px;
+		  letter-spacing: 0px;
+		  color: white;
+		  border: none;
+		  border-radius: 50%;
+		  background: #5a99d4;
+		  cursor: pointer;
+		  box-shadow: 0 0 0 0 rgba(90, 153, 212, 0.5);
+		  -webkit-animation: pulse 0.75s infinite;
+		}
+
+		@-webkit-keyframes pulse {
+		  0% {
+			-moz-transform: scale(0.9);
+			-ms-transform: scale(0.9);
+			-webkit-transform: scale(0.9);
+			transform: scale(0.9);
+		  }
+		  70% {
+			-moz-transform: scale(1);
+			-ms-transform: scale(1);
+			-webkit-transform: scale(1);
+			transform: scale(1);
+			box-shadow: 0 0 0 50px rgba(90, 153, 212, 0);
+		  }
+		  100% {
+			-moz-transform: scale(0.9);
+			-ms-transform: scale(0.9);
+			-webkit-transform: scale(0.9);
+			transform: scale(0.9);
+			box-shadow: 0 0 0 0 rgba(90, 153, 212, 0);
+		  }
+		}
+		</style>
+  </head>
+  <body>
+    
+	<div class='container'> </div>
+    
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+   
+    <script>
+      $(function () {
+        var socket = io();
+  
+        socket.on('sound message', function(msg){ 
+		  
+		  $('.container').append('<span class="pulse-button"></span>');
+	      $('.pulse-button').text(msg.sound);
+	      
+	      $('.pulse-button').css('top', parseInt(msg.top) - 55 + 'px');
+	      $('.pulse-button').css('left', parseInt(msg.left) - 55 + 'px');
+	      
+		  $('.pulse-button').css('width', msg.loudness*2*100 + 'px');
+		  $('.pulse-button').css('height', msg.loudness*2*100 + 'px');
+	      $('.pulse-button').css('line-height', msg.loudness*2*100 + 'px');
+	      $('.pulse-button').css('font-size', msg.loudness*2*20 + 'px');
+	      
+		  setTimeout(function() {
+		    $('.pulse-button').remove();
+		  }, 3000); 
+       
+        }); 
+               	
+      });
+    </script>
+  </body>
+</html>

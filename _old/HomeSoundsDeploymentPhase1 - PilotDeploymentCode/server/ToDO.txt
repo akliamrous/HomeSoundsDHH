@@ -1,0 +1,91 @@
+ToDo #51
+
+27. Add sparklines in sound list
+34: Correct timing of events in waveform view, and make sure they don't overflow
+
+51: Server should load from file, not array. Or maybe store array in file. Because if the server restarts, you are saying that all data is gone!?
+
+40. Variable consistency between client and server (waveform: numberOfDataPoints, animationDuration, client: lengthOfGapInSec). (times should also be coordinated by server)
+-44. Different visualization for duration in floorplan, perhaps a bar (as Jon discussed, though this is a low-priority)
+45. Sound list view: try different time series visualization
+-47. 12hr circle should show labels in grey. no dashed lines, thicker border, grey color. Thickness can vary. Floorplan should not be black bordered. Lighter border color is better.  
+-48. try a color palette across waveform, floorplan circles etc. No, Red Green color blindness. 
+-49. handle handshake soundlist by filling history table.., handle handshake floorplan by filling circle, handle hanshake waveform by floor filling... Time to step towards 24 I think..
+-50. Try with four rooms
+
+Maybes: 
+21. Server should send data client names and number of data clients to web clients  during handshake, and web clients should configure accordingly (eg. waveform should automatically add or remove number of waveforms, floorplan should adjust views and add names, soundlist should initialize tables etc.) [Tried but there's lot more failproofs needed for this]. For example, automatic generate sytlesheet rules and other things based on number of rooms using https://davidwalsh.name/add-rules-stylesheets (paricularly in floorplan)
+24. (40+21) Basically sever should store state and client just visualizes that state.
+38: Add variable arcs (arcs showing 1 hour average data) in floorplan (based on Liang's discussion).
+41. Map different frequencies to different colors: identify speech and non-speech sounds for example (200-1000 is mapped to a different color).
+46. Maybe a different visualization for spectrogram (although this could be done after first deployment)
+
+Done: 
+1. Floorplan backend: Server recognizes high, med, low, blank. (very basic - heuristic)
+2. Fix soundlist: remove search, convert sound -> loudness, location whatever
+3. Test with tablet -- basically two systems
+4. Logging - Data client id (location), timestamp, loudnessLevel, and duration (just like sound list). And client disconnect, connect events.
+5. Implementing "duration" of high, med, low in server  (+ log) and in list view
+6. Change waveform... (use data from python and some d3 generating library..)
+7. Reading Jon's slides, web codes,implement sound event recognition well.
+8. Fix and test backend (it sometimes stops updating for some reason... maybe have one web client connection instead of 3? or maybe not?). do noise filtering as well
+9. Zoom using css zoom and touchscreen.. (no scroll, for now can also just switch for Jon)
+10. Screen bars (delimiters) sould be 1px grey. Soundlist column width adjust to look better.
+11. Put some basic furniture in floorplan and use circles instead of boxes in floorplan.  
+12. Adjust y-axis scales on waveform so that all waveforms have common values. Also make sure if max-data is less than say 0.1, just make everything 0.1 and increase scale to 1 or something.
+15. For soundlist, figure out a way to display past missed data as well. (Ooooh!)
+18. Sometimes the console gets stuck and control C runs the process. (Because of having child.stdout.on everytime the socket.on is connected)
+19. Seting low, high med values.
+20. Waveform update error fix.
+22. Move graph titles to inside the graph
+23. Waveform should load all data (i.e. autofill with current state)
+25. Y axis fixed
+26. Remove white space
+28. Add circles in floorplan for past history 
+29. Animation interpolation in floor-plan
+30. Tag the event in the waveform (but umm, say loud?)
+31. Maybe in floorplan, 50ms is too fast, reduce to 500ms, and then update...
+32. Send separate emit to different sockets (floorplan, waveform etc.) based on timing, data requirements etc. etc.
+33. Show past 30 seconds in the waveform. 
+35: Add pitch in waveform view.
+36. Add summary data in soundlist view.
+37. Add duration in floorplan view (in progress but box shadow did not work -- tried for 4 hrs, perhaps I should try color?)
+42. Waveform speed up
+43. Duration -- box shadow should stay...
+
+Removed: 
+14. Maybe use one socket for all 3 web client for second deployment once you know that all 3 are required...
+
+
+
+Tests to run after changing code:
+0. All views look good.
+1. Server gone and back up.
+2. Each client gone and back up. 
+3. Reload views.
+4. For checking, keep one tablet session always open (without refresh) like how it would look on a deployed tablet.
+
+Tablet Install list:
+1. Chrome, dropbox
+2. python "2.7.14", pyaudio, numpy
+3. node.js (all modules are included in the client dropbox folder so no need to install)
+More steps:
+1. Disable tablet mode.
+2. Enable rotation lock (to do this disconnect keyboard first). 
+3. Disable power button, sleep button, lid settings
+4. Disable lockscreen 
+5. Disable screen off on plugged in, make it 2 hours on battery power
+6. Set brightness full (disable auto brightness). Set night light on.
+7. Disable touchscreen. 
+7. Enable remote login, save ip, and test (install chrome remote login which shouldn't give probs as windows remote login)
+8. Set microphone level to 71.
+
+Fail proofs:
+1. Windows on top of everything.
+2. Disable lock screen
+3. In worse case, remote login (with no lock screen). This will work if tablet shuts down or something as well. Then user can switch it on and I can do the rest. (Leave hole for power button.) [same as SSH]
+
+Tablet List: 
+1. DESKTOP-GMDHC5I - Jon's office. My old surface pro borrowed from CSE.
+2. DESKTOP-BR1L0RT - DJ's office. My Desktop in CSE2.
+3. DESKTOP-UIEOBVU - DJ's home. First refurbished tablet ordered from grant. 
